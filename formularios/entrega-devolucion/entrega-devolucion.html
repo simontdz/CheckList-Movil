@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrega/Devolución de Vehiculo a cargo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        #signature-pad {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            background-color: white;
+            max-width: 100%;
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white py-1">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto">
+                    <img src="../../assets/images/logo RC.png" alt="Logo RC" class="img-fluid" style="max-height: 50px;">
+                </div>
+                <div class="col-auto">
+                    <img src="../../assets/images/Ollagua Logo.png" alt="Ollagua Logo" class="img-fluid" style="max-height: 30px;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+        <hr>
+        <h2 class="mb-3 text-center">Certificado de entrega/devolución de vehículo a cargo</h2>
+        <form class="w-100" style="max-width: 600px;" novalidate>
+            <hr>
+            <div class="row mb-3 d-flex justify-content-between">
+                <div class="col-auto">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label"></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoEntrega" id="entrega0" value="0">
+                                <label class="form-check-label" for="entrega0">
+                                    Entrega
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoEntrega" id="entrega1" value="1">
+                                <label class="form-check-label" for="entrega1">
+                                    Devolución
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <label for="datetime" class="form-label">Fecha</label>
+                    <input type="date" id="datetime" class="form-control">
+                </div>
+            </div>
+
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Cliente:</label>
+                    <input type="text" id="name" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label for="zona" class="form-label">Zona de trabajo:</label>
+                    <input type="text" id="zona" class="form-control">
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="fechaMant" class="form-label">Fecha de ultima mantención:</label>
+                        <input type="text" id="fechaMant" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="kmMant" class="form-label">KM de ultima mantención:</label>
+                        <input type="text" id="kmMant" class="form-control">
+                    </div>
+
+                </div>
+
+
+
+                <hr>
+                <h7 class="text-center fw-bold">Descripción de incidente y/o accidente</h7> <br>
+
+                <div class="row mb-3">
+                    <br>
+                    <div class="col-md-4">
+                        <br>
+                        <label for="tipo" class="form-label">Tipo de Vehículo:</label>
+                        <input type="text" class="form-control" id="tipo">
+                    </div>
+
+                    <div class="col mb-4">
+                        <br>
+                        <label for="marca" class="form-label">Marca:</label>
+                        <input type="text" class="form-control" id="marca">
+                    </div>
+                    <div class="col mb-4">
+                        <br>
+                        <label for="modelo" class="form-label">Modelo:</label>
+                        <input type="text" class="form-control" id="modelo">
+                    </div>
+
+
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col mb-3">
+                        <br>
+                        <label for="año" class="form-label">Año:</label>
+                        <input type="text" class="form-control" id="año">
+                    </div>
+                    <div class="col mb-3">
+                        <br>
+                        <label for="patente" class="form-label">Patente:</label>
+                        <input type="text" class="form-control" id="patente">
+                    </div>
+
+                    <div class="col mb-3">
+                        <br>
+                        <label for="km" class="form-label">Kilometraje:</label>
+                        <input type="text" class="form-control" id="km">
+                    </div>
+
+                    <div class="col mb-3">
+                        <br>
+                        <label for="horometro" class="form-label">Horometro:</label>
+                        <input type="text" class="form-control" id="horometro">
+                    </div>
+                </div>
+
+                <hr>
+                <h7 class="text-center fw-bold">Estado del vehículo</h7>
+
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Permiso de circulación:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="permisoCirculacion"
+                                id="permisoCirculacion0" value="si">
+                            <label class="form-check-label" for="permisoCirculacion0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="permisoCirculacion"
+                                id="permisoCirculacion1" value="no">
+                            <label class="form-check-label" for="permisoCirculacion1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="permisoCirculacion"
+                                id="permisoCirculacion2" value="na">
+                            <label class="form-check-label" for="permisoCirculacion2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaVencimientoPermiso" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaVencimientoPermiso" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Padrón:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="padron" id="padron0" value="si">
+                            <label class="form-check-label" for="padron0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="padron" id="padron1" value="no">
+                            <label class="form-check-label" for="padron1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="padron" id="padron2" value="na">
+                            <label class="form-check-label" for="padron2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaVencimientoPadron" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaVencimientoPadron" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Seguro obligatorio:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="seguroObligatorio"
+                                id="seguroObligatorio0" value="si">
+                            <label class="form-check-label" for="seguroObligatorio0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="seguroObligatorio"
+                                id="seguroObligatorio1" value="no">
+                            <label class="form-check-label" for="seguroObligatorio1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="seguroObligatorio"
+                                id="seguroObligatorio2" value="na">
+                            <label class="form-check-label" for="seguroObligatorio2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaVencimientoSeguro" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaVencimientoSeguro" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Cert. Emisión de Gases:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certEmisionGases" id="certEmisionGases0"
+                                value="si">
+                            <label class="form-check-label" for="certEmisionGases0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certEmisionGases" id="certEmisionGases1"
+                                value="no">
+                            <label class="form-check-label" for="certEmisionGases1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certEmisionGases" id="certEmisionGases2"
+                                value="na">
+                            <label class="form-check-label" for="certEmisionGases2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaVencimientoCertEmisionGases" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaVencimientoCertEmisionGases" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Revisión Técnica:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="revisionTecnica" id="revisionTecnica0"
+                                value="si">
+                            <label class="form-check-label" for="revisionTecnica0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="revisionTecnica" id="revisionTecnica1"
+                                value="no">
+                            <label class="form-check-label" for="revisionTecnica1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="revisionTecnica" id="revisionTecnica2"
+                                value="na">
+                            <label class="form-check-label" for="revisionTecnica2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaVencimientoRevisionTecnica" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaVencimientoRevisionTecnica" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+                <h7 class="text-center fw-bold">Equipamiento y Accesorios</h7>
+                <br>
+                <!-- CERTIFICACION DIELECTRICA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Certificación dieléctrica:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionDielectrica"
+                                id="certificacionDielectrica0" value="si">
+                            <label class="form-check-label" for="certificacionDielectrica0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionDielectrica"
+                                id="certificacionDielectrica1" value="no">
+                            <label class="form-check-label" for="certificacionDielectrica1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionDielectrica"
+                                id="certificacionDielectrica2" value="na">
+                            <label class="form-check-label" for="certificacionDielectrica2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaCertificacionDielectrica" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaCertificacionDielectrica" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CERTIFICACION OPERATIVIDAD (GRUA) -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Certificación operatividad (grúa):</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionOperatividadGrua"
+                                id="certificacionOperatividadGrua0" value="si">
+                            <label class="form-check-label" for="certificacionOperatividadGrua0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionOperatividadGrua"
+                                id="certificacionOperatividadGrua1" value="no">
+                            <label class="form-check-label" for="certificacionOperatividadGrua1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="certificacionOperatividadGrua"
+                                id="certificacionOperatividadGrua2" value="na">
+                            <label class="form-check-label" for="certificacionOperatividadGrua2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaCertificacionOperatividadGrua" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaCertificacionOperatividadGrua" class="form-control">
+                    </div>
+                </div>
+
+                <!-- AIRE ACONDICIONADO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Aire acondicionado:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="aireAcondicionado"
+                                id="aireAcondicionado0" value="si">
+                            <label class="form-check-label" for="aireAcondicionado0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="aireAcondicionado"
+                                id="aireAcondicionado1" value="no">
+                            <label class="form-check-label" for="aireAcondicionado1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="aireAcondicionado"
+                                id="aireAcondicionado2" value="na">
+                            <label class="form-check-label" for="aireAcondicionado2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaAireAcondicionado" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaAireAcondicionado" class="form-control">
+                    </div>
+                </div>
+
+                <!-- TARJETA DE COMBUSTIBLE -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Tarjeta de combustible:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tarjetaCombustible"
+                                id="tarjetaCombustible0" value="si">
+                            <label class="form-check-label" for="tarjetaCombustible0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tarjetaCombustible"
+                                id="tarjetaCombustible1" value="no">
+                            <label class="form-check-label" for="tarjetaCombustible1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tarjetaCombustible"
+                                id="tarjetaCombustible2" value="na">
+                            <label class="form-check-label" for="tarjetaCombustible2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaTarjetaCombustible" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaTarjetaCombustible" class="form-control">
+                    </div>
+                </div>
+
+                <!-- TAG -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Tag:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tag" id="tag0" value="si">
+                            <label class="form-check-label" for="tag0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tag" id="tag1" value="no">
+                            <label class="form-check-label" for="tag1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tag" id="tag2" value="na">
+                            <label class="form-check-label" for="tag2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaTag" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaTag" class="form-control">
+                    </div>
+                </div>
+
+                <!-- GPS -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">GPS:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gps" id="gps0" value="si">
+                            <label class="form-check-label" for="gps0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gps" id="gps1" value="no">
+                            <label class="form-check-label" for="gps1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gps" id="gps2" value="na">
+                            <label class="form-check-label" for="gps2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaGps" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaGps" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CAMARA EXTERIOR -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Cámara exterior:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camaraExterior" id="camaraExterior0"
+                                value="si">
+                            <label class="form-check-label" for="camaraExterior0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camaraExterior" id="camaraExterior1"
+                                value="no">
+                            <label class="form-check-label" for="camaraExterior1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camaraExterior" id="camaraExterior2"
+                                value="na">
+                            <label class="form-check-label" for="camaraExterior2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaCamaraExterior" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaCamaraExterior" class="form-control">
+                    </div>
+                </div>
+
+                <!-- GRABADO PATENTES EN VIDRIOS -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Grabado patentes en vidrios:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="grabadoPatentesVidrios"
+                                id="grabadoPatentesVidrios0" value="si">
+                            <label class="form-check-label" for="grabadoPatentesVidrios0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="grabadoPatentesVidrios"
+                                id="grabadoPatentesVidrios1" value="no">
+                            <label class="form-check-label" for="grabadoPatentesVidrios1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="grabadoPatentesVidrios"
+                                id="grabadoPatentesVidrios2" value="na">
+                            <label class="form-check-label" for="grabadoPatentesVidrios2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="fechaGrabadoPatentesVidrios" class="form-label">Fecha vencimiento:</label>
+                        <input type="date" id="fechaGrabadoPatentesVidrios" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+                <h7 class="text-center fw-bold">Seguridad y Equipamiento</h7>
+                <br><br>
+                <!-- BOTIQUIN -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Botiquín:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="botiquin" id="botiquin0" value="si">
+                            <label class="form-check-label" for="botiquin0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="botiquin" id="botiquin1" value="no">
+                            <label class="form-check-label" for="botiquin1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="botiquin" id="botiquin2" value="na">
+                            <label class="form-check-label" for="botiquin2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsBotiquin" class="form-label">Observación:</label>
+                        <input type="text" id="obsBotiquin" class="form-control">
+                    </div>
+                </div>
+
+                <!-- EXTINTOR -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Extintor Cabina:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor" id="extintor0" value="si">
+                            <label class="form-check-label" for="extintor0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor" id="extintor1" value="no">
+                            <label class="form-check-label" for="extintor1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor" id="extintor2" value="na">
+                            <label class="form-check-label" for="extintor2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsExtintor" class="form-label">Observación:</label>
+                        <input type="text" id="obsExtintor" class="form-control">
+                    </div>
+                </div>
+
+                <!-- BARRA ANTIVUELCO EXTERIOR E INTERIOR -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Barra antivuelco exterior e interior:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barraAntivuelco" id="barraAntivuelco0"
+                                value="si">
+                            <label class="form-check-label" for="barraAntivuelco0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barraAntivuelco" id="barraAntivuelco1"
+                                value="no">
+                            <label class="form-check-label" for="barraAntivuelco1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barraAntivuelco" id="barraAntivuelco2"
+                                value="na">
+                            <label class="form-check-label" for="barraAntivuelco2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsBarraAntivuelco" class="form-label">Observación:</label>
+                        <input type="text" id="obsBarraAntivuelco" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CONOS VIALES -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Conos viales:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="conosViales" id="conosViales0"
+                                value="si">
+                            <label class="form-check-label" for="conosViales0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="conosViales" id="conosViales1"
+                                value="no">
+                            <label class="form-check-label" for="conosViales1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="conosViales" id="conosViales2"
+                                value="na">
+                            <label class="form-check-label" for="conosViales2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsConosViales" class="form-label">Observación:</label>
+                        <input type="text" id="obsConosViales" class="form-control">
+                    </div>
+                </div>
+
+                <!-- RUEDA DE REPUESTO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Rueda de repuesto:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="ruedaRepuesto" id="ruedaRepuesto0"
+                                value="si">
+                            <label class="form-check-label" for="ruedaRepuesto0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="ruedaRepuesto" id="ruedaRepuesto1"
+                                value="no">
+                            <label class="form-check-label" for="ruedaRepuesto1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="ruedaRepuesto" id="ruedaRepuesto2"
+                                value="na">
+                            <label class="form-check-label" for="ruedaRepuesto2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsRuedaRepuesto" class="form-label">Observación:</label>
+                        <input type="text" id="obsRuedaRepuesto" class="form-control">
+                    </div>
+                </div>
+
+                <!-- TRIÁNGULO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Triángulo:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="triangulo" id="triangulo0" value="si">
+                            <label class="form-check-label" for="triangulo0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="triangulo" id="triangulo1" value="no">
+                            <label class="form-check-label" for="triangulo1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="triangulo" id="triangulo2" value="na">
+                            <label class="form-check-label" for="triangulo2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsTriangulo" class="form-label">Observación:</label>
+                        <input type="text" id="obsTriangulo" class="form-control">
+                    </div>
+                </div>
+
+                <!-- GATA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Gata:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gata" id="gata0" value="si">
+                            <label class="form-check-label" for="gata0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gata" id="gata1" value="no">
+                            <label class="form-check-label" for="gata1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gata" id="gata2" value="na">
+                            <label class="form-check-label" for="gata2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsGata" class="form-label">Observación:</label>
+                        <input type="text" id="obsGata" class="form-control">
+                    </div>
+                </div>
+
+                <!-- LLAVE DE RUEDA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Llave de rueda:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="llaveRueda" id="llaveRueda0" value="si">
+                            <label class="form-check-label" for="llaveRueda0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="llaveRueda" id="llaveRueda1" value="no">
+                            <label class="form-check-label" for="llaveRueda1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="llaveRueda" id="llaveRueda2" value="na">
+                            <label class="form-check-label" for="llaveRueda2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsLlaveRueda" class="form-label">Observación:</label>
+                        <input type="text" id="obsLlaveRueda" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Extintor 10 KG  -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Extintor 10 KG:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor10kg" id="extintor10kg0"
+                                value="si">
+                            <label class="form-check-label" for="extintor10kg0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor10kg" id="extintor10kg1"
+                                value="no">
+                            <label class="form-check-label" for="extintor10kg1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="extintor10kg" id="extintor10kg2"
+                                value="na">
+                            <label class="form-check-label" for="extintor10kg2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsExtintor10kg" class="form-label">Observación:</label>
+                        <input type="text" id="obsExtintor10kg" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Luz Estrodoscopica -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Luz Estrodoscopica:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="luz" id="luz0" value="si">
+                            <label class="form-check-label" for="luz0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="luz" id="luz1" value="no">
+                            <label class="form-check-label" for="luz1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="luz" id="luz2" value="na">
+                            <label class="form-check-label" for="luz2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsLuz" class="form-label">Observación:</label>
+                        <input type="text" id="obsLuz" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CINTURON DE SEGURIDAD -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Cinturón de seguridad:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cinturonSeguridad"
+                                id="cinturonSeguridad0" value="si">
+                            <label class="form-check-label" for="cinturonSeguridad0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cinturonSeguridad"
+                                id="cinturonSeguridad1" value="no">
+                            <label class="form-check-label" for="cinturonSeguridad1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cinturonSeguridad"
+                                id="cinturonSeguridad2" value="na">
+                            <label class="form-check-label" for="cinturonSeguridad2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCinturonSeguridad" class="form-label">Observación:</label>
+                        <input type="text" id="obsCinturonSeguridad" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CUÑAS CON SOPORTES Y PIOLAS -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Cuñas con soportes y piolas:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cuñasSoportesPiolas"
+                                id="cuñasSoportesPiolas0" value="si">
+                            <label class="form-check-label" for="cuñasSoportesPiolas0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cuñasSoportesPiolas"
+                                id="cuñasSoportesPiolas1" value="no">
+                            <label class="form-check-label" for="cuñasSoportesPiolas1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cuñasSoportesPiolas"
+                                id="cuñasSoportesPiolas2" value="na">
+                            <label class="form-check-label" for="cuñasSoportesPiolas2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCuñasSoportesPiolas" class="form-label">Observación:</label>
+                        <input type="text" id="obsCuñasSoportesPiolas" class="form-control">
+                    </div>
+                </div>
+
+                <!-- RADIO Y PARLANTES -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Radio y parlantes:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radioParlantes" id="radioParlantes0"
+                                value="si">
+                            <label class="form-check-label" for="radioParlantes0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radioParlantes" id="radioParlantes1"
+                                value="no">
+                            <label class="form-check-label" for="radioParlantes1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radioParlantes" id="radioParlantes2"
+                                value="na">
+                            <label class="form-check-label" for="radioParlantes2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsRadioParlantes" class="form-label">Observación:</label>
+                        <input type="text" id="obsRadioParlantes" class="form-control">
+                    </div>
+                </div>
+
+                <!-- ENCENDEDOR -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Encendedor:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="encendedor" id="encendedor0" value="si">
+                            <label class="form-check-label" for="encendedor0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="encendedor" id="encendedor1" value="no">
+                            <label class="form-check-label" for="encendedor1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="encendedor" id="encendedor2" value="na">
+                            <label class="form-check-label" for="encendedor2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsEncendedor" class="form-label">Observación:</label>
+                        <input type="text" id="obsEncendedor" class="form-control">
+                    </div>
+                </div>
+
+                <!-- ESPEJO INTERIOR Y EXTERIOR -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Espejo interior y exterior:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="espejoInteriorExterior"
+                                id="espejoInteriorExterior0" value="si">
+                            <label class="form-check-label" for="espejoInteriorExterior0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="espejoInteriorExterior"
+                                id="espejoInteriorExterior1" value="no">
+                            <label class="form-check-label" for="espejoInteriorExterior1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="espejoInteriorExterior"
+                                id="espejoInteriorExterior2" value="na">
+                            <label class="form-check-label" for="espejoInteriorExterior2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsEspejoInteriorExterior" class="form-label">Observación:</label>
+                        <input type="text" id="obsEspejoInteriorExterior" class="form-control">
+                    </div>
+                </div>
+
+                <!-- APOYA CABEZA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Apoya cabeza:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="apoyaCabeza" id="apoyaCabeza0"
+                                value="si">
+                            <label class="form-check-label" for="apoyaCabeza0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="apoyaCabeza" id="apoyaCabeza1"
+                                value="no">
+                            <label class="form-check-label" for="apoyaCabeza1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="apoyaCabeza" id="apoyaCabeza2"
+                                value="na">
+                            <label class="form-check-label" for="apoyaCabeza2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsApoyaCabeza" class="form-label">Observación:</label>
+                        <input type="text" id="obsApoyaCabeza" class="form-control">
+                    </div>
+                </div>
+
+                <!-- PISOS GOMA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Pisos goma:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pisosGoma" id="pisosGoma0" value="si">
+                            <label class="form-check-label" for="pisosGoma0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pisosGoma" id="pisosGoma1" value="no">
+                            <label class="form-check-label" for="pisosGoma1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pisosGoma" id="pisosGoma2" value="na">
+                            <label class="form-check-label" for="pisosGoma2">N/A</label>
+                        </div>
+
+
+                    </div>
+                    <div class="col-3">
+                        <label for="obsPisosGoma" class="form-label">Observación:</label>
+                        <input type="text" id="obsPisosGoma" class="form-control">
+                    </div>
+                </div>
+
+                <!-- BATERÍA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Batería:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateria" id="bateria0" value="si">
+                            <label class="form-check-label" for="bateria0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateria" id="bateria1" value="no">
+                            <label class="form-check-label" for="bateria1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateria" id="bateria2" value="na">
+                            <label class="form-check-label" for="bateria2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsBateria" class="form-label">Observación:</label>
+                        <input type="text" id="obsBateria" class="form-control">
+                    </div>
+                </div>
+
+                <!-- FOCOS ÓPTICOS / TRASEROS -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Focos ópticos / traseros:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosOpticosTraseros"
+                                id="focosOpticosTraseros0" value="si">
+                            <label class="form-check-label" for="focosOpticosTraseros0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosOpticosTraseros"
+                                id="focosOpticosTraseros1" value="no">
+                            <label class="form-check-label" for="focosOpticosTraseros1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosOpticosTraseros"
+                                id="focosOpticosTraseros2" value="na">
+                            <label class="form-check-label" for="focosOpticosTraseros2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsFocosOpticosTraseros" class="form-label">Observación:</label>
+                        <input type="text" id="obsFocosOpticosTraseros" class="form-control">
+                    </div>
+                </div>
+
+                <!-- INTERMITENTES -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Intermitentes:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="intermitentes" id="intermitentes0"
+                                value="si">
+                            <label class="form-check-label" for="intermitentes0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="intermitentes" id="intermitentes1"
+                                value="no">
+                            <label class="form-check-label" for="intermitentes1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="intermitentes" id="intermitentes2"
+                                value="na">
+                            <label class="form-check-label" for="intermitentes2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsIntermitentes" class="form-label">Observación:</label>
+                        <input type="text" id="obsIntermitentes" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CARROCERÍA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Carrocería:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carroceria" id="carroceria0" value="si">
+                            <label class="form-check-label" for="carroceria0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carroceria" id="carroceria1" value="no">
+                            <label class="form-check-label" for="carroceria1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carroceria" id="carroceria2" value="na">
+                            <label class="form-check-label" for="carroceria2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCarroceria" class="form-label">Observación:</label>
+                        <input type="text" id="obsCarroceria" class="form-control">
+                    </div>
+                </div>
+
+                <!-- PARACHOQUES DELANTERO / TRASERO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Parachoques delantero / trasero:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="parachoquesDelanteroTrasero"
+                                id="parachoquesDelanteroTrasero0" value="si">
+                            <label class="form-check-label" for="parachoquesDelanteroTrasero0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="parachoquesDelanteroTrasero"
+                                id="parachoquesDelanteroTrasero1" value="no">
+                            <label class="form-check-label" for="parachoquesDelanteroTrasero1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="parachoquesDelanteroTrasero"
+                                id="parachoquesDelanteroTrasero2" value="na">
+                            <label class="form-check-label" for="parachoquesDelanteroTrasero2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsParachoquesDelanteroTrasero" class="form-label">Observación:</label>
+                        <input type="text" id="obsParachoquesDelanteroTrasero" class="form-control">
+                    </div>
+                </div>
+
+                <!-- FOCOS LATERALES -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Focos laterales:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosLaterales" id="focosLaterales0"
+                                value="si">
+                            <label class="form-check-label" for="focosLaterales0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosLaterales" id="focosLaterales1"
+                                value="no">
+                            <label class="form-check-label" for="focosLaterales1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="focosLaterales" id="focosLaterales2"
+                                value="na">
+                            <label class="form-check-label" for="focosLaterales2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsFocosLaterales" class="form-label">Observación:</label>
+                        <input type="text" id="obsFocosLaterales" class="form-control">
+                    </div>
+                </div>
+
+                <!-- NEUMÁTICOS -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Neumáticos:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="neumaticos" id="neumaticos0" value="si">
+                            <label class="form-check-label" for="neumaticos0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="neumaticos" id="neumaticos1" value="no">
+                            <label class="form-check-label" for="neumaticos1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="neumaticos" id="neumaticos2" value="na">
+                            <label class="form-check-label" for="neumaticos2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsNeumaticos" class="form-label">Observación:</label>
+                        <input type="text" id="obsNeumaticos" class="form-control">
+                    </div>
+                </div>
+
+                <!-- ENGANCHE PARA CARRO DE ARRASTRE -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Enganche para carro de arrastre:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="engancheCarroArrastre"
+                                id="engancheCarroArrastre0" value="si">
+                            <label class="form-check-label" for="engancheCarroArrastre0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="engancheCarroArrastre"
+                                id="engancheCarroArrastre1" value="no">
+                            <label class="form-check-label" for="engancheCarroArrastre1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="engancheCarroArrastre"
+                                id="engancheCarroArrastre2" value="na">
+                            <label class="form-check-label" for="engancheCarroArrastre2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsEngancheCarroArrastre" class="form-label">Observación:</label>
+                        <input type="text" id="obsEngancheCarroArrastre" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CARPAS CAPACHO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Carpas capacho:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasCapacho" id="carpasCapacho0"
+                                value="si">
+                            <label class="form-check-label" for="carpasCapacho0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasCapacho" id="carpasCapacho1"
+                                value="no">
+                            <label class="form-check-label" for="carpasCapacho1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasCapacho" id="carpasCapacho2"
+                                value="na">
+                            <label class="form-check-label" for="carpasCapacho2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCarpasCapacho" class="form-label">Observación:</label>
+                        <input type="text" id="obsCarpasCapacho" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CARPAS BRAZO CORTO / BRAZO LARGO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Carpas brazo corto / brazo largo:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasBrazoCortoLargo"
+                                id="carpasBrazoCortoLargo0" value="si">
+                            <label class="form-check-label" for="carpasBrazoCortoLargo0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasBrazoCortoLargo"
+                                id="carpasBrazoCortoLargo1" value="no">
+                            <label class="form-check-label" for="carpasBrazoCortoLargo1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="carpasBrazoCortoLargo"
+                                id="carpasBrazoCortoLargo2" value="na">
+                            <label class="form-check-label" for="carpasBrazoCortoLargo2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCarpasBrazoCortoLargo" class="form-label">Observación:</label>
+                        <input type="text" id="obsCarpasBrazoCortoLargo" class="form-control">
+                    </div>
+                </div>
+
+                <!-- BARRENO -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Barreno:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barreno" id="barreno0" value="si">
+                            <label class="form-check-label" for="barreno0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barreno" id="barreno1" value="no">
+                            <label class="form-check-label" for="barreno1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="barreno" id="barreno2" value="na">
+                            <label class="form-check-label" for="barreno2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsBarreno" class="form-label">Observación:</label>
+                        <input type="text" id="obsBarreno" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CABLE TIERRA -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Cable tierra:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cableTierra" id="cableTierra0"
+                                value="si">
+                            <label class="form-check-label" for="cableTierra0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cableTierra" id="cableTierra1"
+                                value="no">
+                            <label class="form-check-label" for="cableTierra1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cableTierra" id="cableTierra2"
+                                value="na">
+                            <label class="form-check-label" for="cableTierra2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCableTierra" class="form-label">Observación:</label>
+                        <input type="text" id="obsCableTierra" class="form-control">
+                    </div>
+                </div>
+
+                <!-- KIT ANTIDERRAME -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Kit antiderrame:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="kitAntiderrame" id="kitAntiderrame0"
+                                value="si">
+                            <label class="form-check-label" for="kitAntiderrame0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="kitAntiderrame" id="kitAntiderrame1"
+                                value="no">
+                            <label class="form-check-label" for="kitAntiderrame1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="kitAntiderrame" id="kitAntiderrame2"
+                                value="na">
+                            <label class="form-check-label" for="kitAntiderrame2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsKitAntiderrame" class="form-label">Observación:</label>
+                        <input type="text" id="obsKitAntiderrame" class="form-control">
+                    </div>
+                </div>
+
+                <!-- BATERÍA JOYSTICK / CARGADOR JOYSTICK -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Batería joystick / cargador joystick:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateriaJoystickCargador"
+                                id="bateriaJoystickCargador0" value="si">
+                            <label class="form-check-label" for="bateriaJoystickCargador0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateriaJoystickCargador"
+                                id="bateriaJoystickCargador1" value="no">
+                            <label class="form-check-label" for="bateriaJoystickCargador1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bateriaJoystickCargador"
+                                id="bateriaJoystickCargador2" value="na">
+                            <label class="form-check-label" for="bateriaJoystickCargador2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsBateriaJoystickCargador" class="form-label">Observación:</label>
+                        <input type="text" id="obsBateriaJoystickCargador" class="form-control">
+                    </div>
+                </div>
+
+                <!-- JOYSTICK -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Joystick:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="joystick" id="joystick0" value="si">
+                            <label class="form-check-label" for="joystick0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="joystick" id="joystick1" value="no">
+                            <label class="form-check-label" for="joystick1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="joystick" id="joystick2" value="na">
+                            <label class="form-check-label" for="joystick2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsJoystick" class="form-label">Observación:</label>
+                        <input type="text" id="obsJoystick" class="form-control">
+                    </div>
+                </div>
+
+                <!-- LINER -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Liner:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="liner" id="liner0" value="si">
+                            <label class="form-check-label" for="liner0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="liner" id="liner1" value="no">
+                            <label class="form-check-label" for="liner1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="liner" id="liner2" value="na">
+                            <label class="form-check-label" for="liner2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsLiner" class="form-label">Observación:</label>
+                        <input type="text" id="obsLiner" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CAPACHO CON ACOPLE -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Capacho con acople:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="capachoConAcople" id="capachoConAcople0"
+                                value="si">
+                            <label class="form-check-label" for="capachoConAcople0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="capachoConAcople" id="capachoConAcople1"
+                                value="no">
+                            <label class="form-check-label" for="capachoConAcople1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="capachoConAcople" id="capachoConAcople2"
+                                value="na">
+                            <label class="form-check-label" for="capachoConAcople2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCapachoConAcople" class="form-label">Observación:</label>
+                        <input type="text" id="obsCapachoConAcople" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Prensa Mordaza -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Prensa Mordaza:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="prensaMordaza" id="prensaMordaza0"
+                                value="si">
+                            <label class="form-check-label" for="prensaMordaza0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="prensaMordaza" id="prensaMordaza1"
+                                value="no">
+                            <label class="form-check-label" for="prensaMordaza1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="prensaMordaza" id="prensaMordaza2"
+                                value="na">
+                            <label class="form-check-label" for="prensaMordaza2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsPrensaMordaza" class="form-label">Observación:</label>
+                        <input type="text" id="obsPrensaMordaza" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Camilla de Emergencia -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4">
+                        <label class="form-label">Camilla de Emergencia:</label>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camilla" id="camilla0" value="si">
+                            <label class="form-check-label" for="camilla0">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camilla" id="camilla1" value="no">
+                            <label class="form-check-label" for="camilla1">No</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="camilla" id="camilla2" value="na">
+                            <label class="form-check-label" for="camilla2">N/A</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="obsCamilla" class="form-label">Observación:</label>
+                        <input type="text" id="obsCamilla" class="form-control">
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+            <hr>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre Responsable de entrega:</label>
+                    <input type="text" class="form-control mb-2" id="nombreResEntrega">
+                    <label class="form-label">Rut Responsable de entrega:</label>
+                    <input type="text" class="form-control mb-3" id="rutResEntrega">
+                    <label class="form-label">Firma Responsable de Entrega</label>
+                    <canvas id="signature-pad-entrega" class="mb-2" width="400" height="200"
+                        style="border: 1px solid #dee2e6; border-radius: 0.375rem; background-color: white; max-width: 100%; width: 100%; height: 200px;"></canvas>
+                    <button type="button" id="clear-entrega" class="btn btn-secondary">Limpiar</button>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre Responsable de recepción:</label>
+                    <input type="text" class="form-control mb-2" id="nombreResRecepcion">
+                    <label class="form-label">Rut Responsable de recepción:</label>
+                    <input type="text" class="form-control mb-3" id="rutResRecepcion">
+                    <label class="form-label">Firma Responsable de Recepción</label>
+                    <canvas id="signature-pad-recepcion" class="mb-2" width="400" height="200"
+                        style="border: 1px solid #dee2e6; border-radius: 0.375rem; background-color: white; max-width: 100%; width: 100%; height: 200px;"></canvas>
+                    <button type="button" id="clear-recepcion" class="btn btn-secondary">Limpiar</button>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="lugarGeografico" class="form-label">Lugar geográfico de entrega:</label>
+                    <input type="text" class="form-control" id="lugarGeografico">
+                </div>
+            </div>
+
+            <!-- AJUSTE VISUAL DE COMBUSTIBLE -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="form-label">Nivel de combustible (arrastra la línea roja):</label>
+                    <div style="position: relative; display: inline-block; border: 1px solid #ccc;">
+                        <img id="pdfPreview" src="../../assets/images/aforador.png" style="max-width: 400px; height: auto;">
+                        <div id="fuelNeedle" style="position: absolute; width: 3px; height: 70px; background: red; transform-origin: bottom center; left: 47%; top: 30%; cursor: grab; border-radius: 2px;"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            
+
+
+            <!-- DIBUJO DE ABOLLADURAS -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="form-label">Marcar abolladuras (dibuja sobre la imagen):</label>
+                    <div style="position: relative; display: inline-block; border: 1px solid #ccc;">
+                        <img id="abolladurasImg" src="../../assets/images/autos.png" style="max-width: 400px; height: auto;">
+                        <canvas id="abolladurasCanvas" style="position: absolute; top: 0; left: 0; cursor: crosshair;"></canvas>
+                    </div>
+                    <br>
+                    <button type="button" id="clearAbolladuras" class="btn btn-secondary mt-2">Limpiar Dibujos</button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE FOTOS -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="form-label">Agregar fotos (máximo 4 por página):</label>
+                    <input type="file" id="photoInput" accept="image/*" multiple class="form-control mb-3">
+                    <div id="photoPreview" class="row"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="button" id="download-pdf" class="btn btn-primary">Generar Reporte</button>
+                </div>
+            </div>
+            <br>
+        </form>
+    </div>
+
+    <!-- Scripts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="entrega-devolucion.js"></script>
+</body>
+
+</html>

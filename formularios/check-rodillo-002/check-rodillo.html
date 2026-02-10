@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECK LIST RODILLO COMPACTADOR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/formularios.css" rel="stylesheet">
+    <style>
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .header-table td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+
+        .checklist-table {
+            min-width: 900px;
+        }
+
+        .item-cell {
+            width: 40px;
+        }
+
+        .description-cell {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .checkbox-cell {
+            width: 40px;
+        }
+
+        .section-header {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        textarea {
+            border: none;
+            outline: none;
+            padding: 4px;
+            width: 100%;
+        }
+
+        .rodillo-img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="form-container">
+            <table class="header-table">
+                <tr>
+                    <td rowspan="3" style="width: 200px;">
+                        <img src="../../assets/images/Ollagua Logo.png" alt="Ollagua Logo" style="max-width: 180px;">
+                    </td>
+                    <td rowspan="2" style="text-align: center; font-weight: bold;">
+                        DEPARTAMENTO DE PREVENCION DE RIESGOS<br>
+                        CHECK LIST RODILLO COMPACTADOR
+                    </td>
+                    <td style="width: 200px;">Código: CHECK-MOVIL-0002</td>
+                </tr>
+                <tr>
+                    <td>Fecha: <input type="date" id="fechaDoc"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">Versión: 00</td>
+                    <td>Página 1 de 1</td>
+                </tr>
+            </table>
+
+            <table class="header-table">
+                <tr>
+                    <td style="width: 50%;">
+                        OBRA O CONTRATO: <input type="text" id="obraContrato" style="width: 65%;">
+                    </td>
+                    <td>
+                        ÁREA: <input type="text" id="area" style="width: 75%;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        LUGAR: <input type="text" id="lugar" style="width: 75%;">
+                    </td>
+                    <td>
+                        FECHA: <input type="date" id="fecha" style="width: 130px;">
+                    </td>
+                </tr>
+            </table>
+
+            <table class="header-table">
+                <tr>
+                    <td style="width: 20%;">CODIGO: <input type="text" id="codigo" style="width: 60%;"></td>
+                    <td style="width: 20%;">N° DE SERIE: <input type="text" id="serie" style="width: 50%;"></td>
+                    <td rowspan="3" style="width: 20%; text-align: center;">
+                        <img src="../../assets/images/rodillo.png" alt="Rodillo" class="rodillo-img">
+                    </td>
+                </tr>
+                <tr>
+                    <td>MARCA: <input type="text" id="marca" style="width: 70%;"></td>
+                    <td>MODELO: <input type="text" id="modelo" style="width: 60%;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">ODOMETRO: <input type="number" id="odometro" style="width: 150px;"></td>
+                </tr>
+            </table>
+
+            <table class="checklist-table">
+                <thead>
+                    <tr>
+                        <th class="item-cell">ITEM</th>
+                        <th>DESCRIPCION</th>
+                        <th class="checkbox-cell">B</th>
+                        <th class="checkbox-cell">M</th>
+                        <th class="checkbox-cell">R</th>
+                        <th class="checkbox-cell">N/A</th>
+                        <th style="width: 200px;">OBSERVACIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="7" class="section-header">FUNCIONAMIENTO DEL MOTOR</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td class="description-cell">Funcionamiento del Motor</td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="na"></td>
+                        <td><input type="text" id="obs1"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="description-cell">Tapa de llenado de aceite</td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="na"></td>
+                        <td><input type="text" id="obs2"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="description-cell">Varilla de medicion de nivel de aceite</td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="na"></td>
+                        <td><input type="text" id="obs3"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="description-cell">Estado del turbo alimentador</td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="na"></td>
+                        <td><input type="text" id="obs4"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="description-cell">Estado de Radiador</td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="na"></td>
+                        <td><input type="text" id="obs5"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="description-cell">Tapa Radiador</td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="na"></td>
+                        <td><input type="text" id="obs6"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="description-cell">Estado de Manguera del Radiador y Enfriador</td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="na"></td>
+                        <td><input type="text" id="obs7"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="description-cell">Freno Motor</td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="na"></td>
+                        <td><input type="text" id="obs8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="section-header">SISTEMA DE LUBRICACION</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="description-cell">Estado de aceite</td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="na"></td>
+                        <td><input type="text" id="obs9"></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="description-cell">Hodometro y fecha de la ultima mantencion</td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="na"></td>
+                        <td><input type="text" id="obs10"></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td class="description-cell">Estado de Filtros de Aceite</td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="na"></td>
+                        <td><input type="text" id="obs11"></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td class="description-cell">Consumo de aceite</td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="na"></td>
+                        <td><input type="text" id="obs12"></td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td class="description-cell">Fugas de aceite del motor</td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="na"></td>
+                        <td><input type="text" id="obs13"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="section-header">SISTEMA ELECTRICO</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td class="description-cell">Sistema de luces en general</td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="na"></td>
+                        <td><input type="text" id="obs14"></td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td class="description-cell">Baliza</td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="na"></td>
+                        <td><input type="text" id="obs15"></td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td class="description-cell">Alarma de retroceso</td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="na"></td>
+                        <td><input type="text" id="obs16"></td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td class="description-cell">Bornes de bateria</td>
+                        <td><input type="checkbox" class="form-check-input" name="q17" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q17" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q17" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q17" value="na"></td>
+                        <td><input type="text" id="obs17"></td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td class="description-cell">Plumilla limpia parabrisas</td>
+                        <td><input type="checkbox" class="form-check-input" name="q18" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q18" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q18" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q18" value="na"></td>
+                        <td><input type="text" id="obs18"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="section-header">ESTRUCTURA GENERAL DEL EQUIPO</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td class="description-cell">Neumaticos</td>
+                        <td><input type="checkbox" class="form-check-input" name="q19" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q19" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q19" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q19" value="na"></td>
+                        <td><input type="text" id="obs19"></td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td class="description-cell">Parbrisas</td>
+                        <td><input type="checkbox" class="form-check-input" name="q20" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q20" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q20" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q20" value="na"></td>
+                        <td><input type="text" id="obs20"></td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td class="description-cell">Espejos</td>
+                        <td><input type="checkbox" class="form-check-input" name="q21" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q21" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q21" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q21" value="na"></td>
+                        <td><input type="text" id="obs21"></td>
+                    </tr>
+                    <tr>
+                        <td>22</td>
+                        <td class="description-cell">Asiento</td>
+                        <td><input type="checkbox" class="form-check-input" name="q22" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q22" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q22" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q22" value="na"></td>
+                        <td><input type="text" id="obs22"></td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td class="description-cell">Bocina</td>
+                        <td><input type="checkbox" class="form-check-input" name="q23" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q23" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q23" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q23" value="na"></td>
+                        <td><input type="text" id="obs23"></td>
+                    </tr>
+                    <tr>
+                        <td>24</td>
+                        <td class="description-cell">Cinturon de seguridad</td>
+                        <td><input type="checkbox" class="form-check-input" name="q24" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q24" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q24" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q24" value="na"></td>
+                        <td><input type="text" id="obs24"></td>
+                    </tr>
+                    <tr>
+                        <td>25</td>
+                        <td class="description-cell">Extintor</td>
+                        <td><input type="checkbox" class="form-check-input" name="q25" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q25" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q25" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q25" value="na"></td>
+                        <td><input type="text" id="obs25"></td>
+                    </tr>
+                    <tr>
+                        <td>26</td>
+                        <td class="description-cell">Puertas</td>
+                        <td><input type="checkbox" class="form-check-input" name="q26" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q26" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q26" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q26" value="na"></td>
+                        <td><input type="text" id="obs26"></td>
+                    </tr>
+                    <tr>
+                        <td>27</td>
+                        <td class="description-cell">Bomba de Agua</td>
+                        <td><input type="checkbox" class="form-check-input" name="q27" value="b"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q27" value="m"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q27" value="r"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q27" value="na"></td>
+                        <td><input type="text" id="obs27"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="header-table" style="margin-top: 20px;">
+                <tr>
+                    <td colspan="2" style="padding: 10px;">
+                        <strong>Observaciones:</strong>
+                        <textarea id="observaciones" rows="3" style="border: 1px solid #dee2e6;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: center; width: 50%;">REALIZÓ</th>
+                    <th style="text-align: center; width: 50%;">REVISÓ</th>
+                </tr>
+                <tr>
+                    <td>NOMBRE: <input type="text" id="realizoNombre"></td>
+                    <td>NOMBRE: <input type="text" id="revisoNombre"></td>
+                </tr>
+                <tr>
+                    <td>CARGO: <input type="text" id="realizoCargo"></td>
+                    <td>CARGO: <input type="text" id="revisoCargo"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 5px;">FIRMA:</div>
+                            <canvas id="firmaRealizo" width="300" height="120" style="border: 1px solid #000; cursor: crosshair; background: white; max-width: 100%; display: block; margin: 0 auto;"></canvas>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="limpiarFirma('firmaRealizo')">Limpiar</button>
+                            <hr style="border-top: 1px solid #000; margin: 15px 0;">
+                            <div>FECHA: <input type="date" id="realizoFecha" style="width: 150px;"></div>
+                        </div>
+                    </td>
+                    <td style="padding: 10px;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 5px;">FIRMA:</div>
+                            <canvas id="firmaReviso" width="300" height="120" style="border: 1px solid #000; cursor: crosshair; background: white; max-width: 100%; display: block; margin: 0 auto;"></canvas>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="limpiarFirma('firmaReviso')">Limpiar</button>
+                            <hr style="border-top: 1px solid #000; margin: 15px 0;">
+                            <div>FECHA: <input type="date" id="revisoFecha" style="width: 150px;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="text-center mt-4 no-print">
+                <button class="btn btn-primary btn-lg" onclick="generarPDF()">Generar PDF</button>
+                <button class="btn btn-secondary btn-lg" onclick="window.location.href='index.html'">Volver al Inicio</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="check-rodillo.js"></script>
+</body>
+
+</html>

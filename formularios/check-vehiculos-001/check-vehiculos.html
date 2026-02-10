@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECK LIST VEHICULOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/formularios.css" rel="stylesheet">
+    <style>
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .header-table td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+
+        .checklist-table {
+            min-width: 800px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            border: none;
+            outline: none;
+            padding: 4px;
+            width: 100%;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="form-container">
+            <table class="header-table">
+                <tr>
+                    <td rowspan="3" style="width: 200px; text-align: center; vertical-align: middle;">
+                        <img src="../../assets/images/logo montajes.jpg" alt="Logo Montajes" style="max-width: 180px;">
+                    </td>
+                    <td rowspan="2" style="text-align: center; font-weight: bold;">
+                        DEPARTAMENTO DE PREVENCION DE RIESGOS<br>
+                        CHECK LIST VEHICULOS
+                    </td>
+                    <td style="width: 200px;">Código: CHECK-MOVIL-0001</td>
+                </tr>
+                <tr>
+                    <td>Fecha: <input type="date" id="fechaDoc"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">Versión: 00</td>
+                    <td>Página 1 de 1</td>
+                </tr>
+            </table>
+
+            <table class="header-table">
+                <tr>
+                    <td style="width: 50%;">
+                        OBRA O CONTRATO: <input type="text" id="obraContrato" style="width: 65%;">
+                    </td>
+                    <td>
+                        ÁREA: <input type="text" id="area" style="width: 75%;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        LUGAR: <input type="text" id="lugar" style="width: 75%;">
+                    </td>
+                    <td>
+                        FECHA: <input type="date" id="fecha" style="width: 130px;">
+                    </td>
+                </tr>
+            </table>
+
+            <table class="checklist-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">ELEMENTOS A INSPECCIONAR</th>
+                        <th class="checkbox-cell">SI</th>
+                        <th class="checkbox-cell">NO</th>
+                        <th class="checkbox-cell">N.A</th>
+                        <th style="width: 20%;">Responsable ejecución</th>
+                        <th style="width: 15%;">Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="question-cell">¿El vehículo se encuentra con sus documentos al día?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q1" value="na"></td>
+                        <td><input type="text" id="resp1"></td>
+                        <td><input type="date" id="fecha1"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El vehículo tiene un programa de mantención?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q2" value="na"></td>
+                        <td><input type="text" id="resp2"></td>
+                        <td><input type="date" id="fecha2"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El sistema de dirección del vehículo se encuentra en buenas condiciones?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q3" value="na"></td>
+                        <td><input type="text" id="resp3"></td>
+                        <td><input type="date" id="fecha3"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El sistema de frenos se encuentra en buenas condiciones de operación?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q4" value="na"></td>
+                        <td><input type="text" id="resp4"></td>
+                        <td><input type="date" id="fecha4"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El sistema de luces se encuentra en buenas condiciones?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q5" value="na"></td>
+                        <td><input type="text" id="resp5"></td>
+                        <td><input type="date" id="fecha5"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Los neumáticos se encuentran en buenas condiciones de uso?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q6" value="na"></td>
+                        <td><input type="text" id="resp6"></td>
+                        <td><input type="date" id="fecha6"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El vehículo tiene neumático de repuesto?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q7" value="na"></td>
+                        <td><input type="text" id="resp7"></td>
+                        <td><input type="date" id="fecha7"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Los limpia parabrisas se encuentran en buenas condiciones?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q8" value="na"></td>
+                        <td><input type="text" id="resp8"></td>
+                        <td><input type="date" id="fecha8"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Los parabrisas y vidrios se encuentran en buen estado?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q9" value="na"></td>
+                        <td><input type="text" id="resp9"></td>
+                        <td><input type="date" id="fecha9"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿La bocina del vehículo se encuentra en buen estado?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q10" value="na"></td>
+                        <td><input type="text" id="resp10"></td>
+                        <td><input type="date" id="fecha10"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Los cinturones de seguridad se encuentran buenas condiciones de uso?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q11" value="na"></td>
+                        <td><input type="text" id="resp11"></td>
+                        <td><input type="date" id="fecha11"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Los espejos se encuentran en buenas condiciones de uso?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q12" value="na"></td>
+                        <td><input type="text" id="resp12"></td>
+                        <td><input type="date" id="fecha12"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El vehículo cuenta con extintor, triángulos, gata y llave de rueda en buen estado?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q13" value="na"></td>
+                        <td><input type="text" id="resp13"></td>
+                        <td><input type="date" id="fecha13"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿El vehículo cuenta con cuñas?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q14" value="na"></td>
+                        <td><input type="text" id="resp14"></td>
+                        <td><input type="date" id="fecha14"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">¿Existe botiquin implementado y registro de capacitación del uso del botiquin?</td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q15" value="na"></td>
+                        <td><input type="text" id="resp15"></td>
+                        <td><input type="date" id="fecha15"></td>
+                    </tr>
+                    <tr>
+                        <td class="question-cell">Otros: <input type="text" id="otros" style="width: 80%;"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="si"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="no"></td>
+                        <td><input type="checkbox" class="form-check-input" name="q16" value="na"></td>
+                        <td><input type="text" id="resp16"></td>
+                        <td><input type="date" id="fecha16"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="header-table" style="margin-top: 10px;">
+                <tr>
+                    <td style="width: 30%;">Vehículo a cargo del Sr:</td>
+                    <td><input type="text" id="vehiculoCargo"></td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Vehículo Patente:</td>
+                    <td><input type="text" id="vehiculoPatente"></td>
+                </tr>
+            </table>
+
+            <table class="header-table" style="margin-top: 20px;">
+                <tr>
+                    <td colspan="2" style="padding: 10px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>OBSERVACIONES:</strong>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="naCheckbox" onchange="toggleNA()">
+                                <label class="form-check-label" for="naCheckbox">
+                                    N.A: NO APLICABLE
+                                </label>
+                            </div>
+                        </div>
+                        <textarea id="observaciones" rows="3" style="border: 1px solid #dee2e6;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: center; width: 50%;">REALIZÓ</th>
+                    <th style="text-align: center; width: 50%;">REVISÓ</th>
+                </tr>
+                <tr>
+                    <td>NOMBRE: <input type="text" id="realizoNombre"></td>
+                    <td>NOMBRE: <input type="text" id="revisoNombre"></td>
+                </tr>
+                <tr>
+                    <td>CARGO: <input type="text" id="realizoCargo"></td>
+                    <td>CARGO: <input type="text" id="revisoCargo"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 5px;">FIRMA:</div>
+                            <canvas id="firmaRealizo" width="300" height="120" style="border: 1px solid #000; cursor: crosshair; background: white; max-width: 100%; display: block; margin: 0 auto;"></canvas>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="limpiarFirma('firmaRealizo')">Limpiar</button>
+                            <hr style="border-top: 1px solid #000; margin: 15px 0;">
+                            <div>FECHA: <input type="date" id="realizoFecha" style="width: 150px;"></div>
+                        </div>
+                    </td>
+                    <td style="padding: 10px;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 5px;">FIRMA:</div>
+                            <canvas id="firmaReviso" width="300" height="120" style="border: 1px solid #000; cursor: crosshair; background: white; max-width: 100%; display: block; margin: 0 auto;"></canvas>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="limpiarFirma('firmaReviso')">Limpiar</button>
+                            <hr style="border-top: 1px solid #000; margin: 15px 0;">
+                            <div>FECHA: <input type="date" id="revisoFecha" style="width: 150px;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="mt-4 no-print">
+                <button class="btn btn-primary btn-lg" onclick="generarPDF()">Generar PDF</button>
+                <button class="btn btn-secondary btn-lg" onclick="window.location.href='../../index.html'">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="check-vehiculos.js"></script>
+</body>
+
+</html>
