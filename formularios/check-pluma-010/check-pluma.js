@@ -1,20 +1,22 @@
 const checklistItems = [
-    { section: 'DOCUMENTOS', items: ['Permiso de Circulación', 'Seguro Obligatorio', 'Certificado Antivuelco ext.', 'Certificado Antivuelco int.', 'Patente del vehículo del.', 'Patente del vehículo tras.', 'Revisión Tecnica', 'Ultima Mantención']},
-    { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Neblineros', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento']},
-    { section: 'NEUMATICOS', items: ['Delantero Izquierdo', 'Delantero Derecho', 'Trasero Izquierdo', 'Trasero Derecho', 'Repuesto']},
-    { section: 'NIVELES', items: ['Agua radiador', 'Aceite', 'Liquido de frenos', 'Agua limpiaparabrisas', 'Aire acondicionado', '', '']},
-    { section: 'INTERIOR CABINA', items: ['Alza Vidrios', 'Cierre Centralizado', 'Radio Comercial', 'Relojes Indicadores', 'Plumillas', 'Aire Acondicionado', 'Calefacción', 'Bocina', 'Parabrisas', 'Luneta trasera', 'Vidrio lat. delantero izq.', 'Vidrio lat. delantero der.', 'Vidrio lat. trasero izq.', 'Vidrio lat. trasero der.', 'Espejo lateral izq.', 'Espejo lateral der.', 'Espejo retrovisor']},
-    { section: 'ACCESORIOS SEGURIDAD', items: ['Alarma de Retroceso', 'Freno de Mano', 'Botiquín', 'Chaleco Reflectante (1)', 'Cuñas (2)', 'Extintor PQS', 'Triangulos', 'Cinturón Seguridad chofer', 'Cinturón Seguridad acomp.', 'Cinturón Seguridad trasero', 'Barra antivuelco interior', 'Barra antivuelco exterior', 'Gata', 'Llave de reparación ruedas', 'Varillas para reparación', 'Kit de enganche (arrastre)']}
+    { section: 'DOCUMENTOS', items: ['Padrón', 'Permiso de Circulación', 'Revisión Técnica', 'Seguro Obligatorio', 'Certificado de Operatividad', 'Certificado de Mantención', 'Certificado Capacho', 'Ultima Mantención', 'Tabla de Cargas']},
+    { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento', 'L. Trocha (izquierdo)', 'L. Trocha (derecho)', 'L. Trocha (traseras)']},
+    { section: 'NEUMATICOS', items: ['Delantero Izquierdo', 'Delantero Derecho', 'Trasero Interior Izquierdo', 'Trasero Interior Derecho', 'Trasero Izquierdo', 'Trasero Derecho', 'Repuesto']},
+    { section: 'VIDRIOS', items: ['Parabrisas', 'Luneta', 'Lado Izquierdo', 'Lado Derecho', 'Lateral Izquierdo', 'Lateral Derecho']},
+    { section: 'ESPEJOS', items: ['Lateral Izquierdo', 'Lateral Derecho']},
+    { section: 'INTERIOR CABINA', items: ['Bocina', 'Cinturón de Seguridad', 'Aire Acondicionado', 'Calefacción', 'Relojes indicadores', 'Plumillas']},
+    { section: 'ACCESORIOS Y SEGURIDAD', items: ['Alarma de Retroceso', 'Extintor', 'Botiquín', 'Conos (12 unidades)', 'Gata', 'Barrote', 'Llave Rueda', 'Cuñas (4)', 'Almohadillas (4)', 'Mazo', 'Cable Puesta a tierra', 'prensa o mordaza', 'Barreno', 'Kit Antiderrame']},
+    { section: 'GENERAL PLUMA', items: ['Estabilizador (F.I.)', 'Estabilizador (F.D.)', 'Estabilizador (T.I.)', 'Estabilizador (T.D.)', 'Brazo Giratorio', 'Escaleras de acceso', 'Control joystick', 'Estado canasto', 'Comandos Torre', 'Sistema Hidráulico', 'Baterías Joystick', 'Cargador Joystick']}
 ];
 
 let canvas, ctx, isDrawing = false;
-let camionetaCanvas, camionetaCtx, isCamionetaDrawing = false;
+let plumaCanvas, plumaCtx, isPlumaDrawing = false;
 let uploadedPhotos = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadChecklistItems();
     setupSignature();
-    setupCamionetaCanvas();
+    setupPlumaCanvas();
     setupPhotoUpload();
     document.getElementById('fecha').valueAsDate = new Date();
 });
@@ -30,8 +32,6 @@ function loadChecklistItems() {
 
         section.items.forEach(item => {
             const row = document.createElement('tr');
-            const isEnsayoDielectrico = item.includes('Prueba Ensayo Dieléctrico');
-            const placeholder = isEnsayoDielectrico ? 'vence: dd/mm/aaaa' : '';
             
             row.innerHTML = `
                 <td style="width: 35%;">${item}</td>
@@ -41,7 +41,7 @@ function loadChecklistItems() {
                 <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_${itemNumber}"></td>
                 <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_${itemNumber}"></td>
                 <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_${itemNumber}"></td>
-                <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_${itemNumber}" placeholder="${placeholder}"></td>
+                <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_${itemNumber}"></td>
             `;
             tbody.appendChild(row);
             itemNumber++;
@@ -100,56 +100,58 @@ function clearSignature() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function setupCamionetaCanvas() {
-    const img = document.getElementById('camionetaImg');
-    camionetaCanvas = document.getElementById('camionetaCanvas');
-    camionetaCtx = camionetaCanvas.getContext('2d');
+function setupPlumaCanvas() {
+    const img = document.getElementById('plumaImg');
+    plumaCanvas = document.getElementById('plumaCanvas');
+    plumaCtx = plumaCanvas.getContext('2d');
+    
+    let isDrawing = false;
     
     function resizeCanvas() {
-        camionetaCanvas.width = img.offsetWidth;
-        camionetaCanvas.height = img.offsetHeight;
+        plumaCanvas.width = img.offsetWidth;
+        plumaCanvas.height = img.offsetHeight;
     }
     
     img.addEventListener('load', resizeCanvas);
     if (img.complete) resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
-    camionetaCtx.strokeStyle = '#ff0000';
-    camionetaCtx.lineWidth = 3;
+    plumaCtx.strokeStyle = '#ff0000';
+    plumaCtx.lineWidth = 3;
     
     function startDrawing(e) {
-        isCamionetaDrawing = true;
-        const rect = camionetaCanvas.getBoundingClientRect();
+        isDrawing = true;
+        const rect = plumaCanvas.getBoundingClientRect();
         const x = (e.clientX || e.touches[0].clientX) - rect.left;
         const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        camionetaCtx.beginPath();
-        camionetaCtx.moveTo(x, y);
+        plumaCtx.beginPath();
+        plumaCtx.moveTo(x, y);
     }
     
     function draw(e) {
-        if (!isCamionetaDrawing) return;
+        if (!isDrawing) return;
         e.preventDefault();
-        const rect = camionetaCanvas.getBoundingClientRect();
+        const rect = plumaCanvas.getBoundingClientRect();
         const x = (e.clientX || e.touches[0].clientX) - rect.left;
         const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        camionetaCtx.lineTo(x, y);
-        camionetaCtx.stroke();
+        plumaCtx.lineTo(x, y);
+        plumaCtx.stroke();
     }
     
     function stopDrawing() {
-        isCamionetaDrawing = false;
+        isDrawing = false;
     }
     
-    camionetaCanvas.addEventListener('mousedown', startDrawing);
-    camionetaCanvas.addEventListener('mousemove', draw);
-    camionetaCanvas.addEventListener('mouseup', stopDrawing);
-    camionetaCanvas.addEventListener('mouseout', stopDrawing);
-    camionetaCanvas.addEventListener('touchstart', startDrawing, { passive: false });
-    camionetaCanvas.addEventListener('touchmove', draw, { passive: false });
-    camionetaCanvas.addEventListener('touchend', stopDrawing);
+    plumaCanvas.addEventListener('mousedown', startDrawing);
+    plumaCanvas.addEventListener('mousemove', draw);
+    plumaCanvas.addEventListener('mouseup', stopDrawing);
+    plumaCanvas.addEventListener('mouseout', stopDrawing);
+    plumaCanvas.addEventListener('touchstart', startDrawing, { passive: false });
+    plumaCanvas.addEventListener('touchmove', draw, { passive: false });
+    plumaCanvas.addEventListener('touchend', stopDrawing);
     
-    document.getElementById('clearCamioneta').addEventListener('click', function() {
-        camionetaCtx.clearRect(0, 0, camionetaCanvas.width, camionetaCanvas.height);
+    document.getElementById('clearPluma').addEventListener('click', function() {
+        plumaCtx.clearRect(0, 0, plumaCanvas.width, plumaCanvas.height);
     });
 }
 
@@ -267,13 +269,16 @@ function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     
+    const realizadaPor = document.getElementById('realizadaPor').value;
+    const rut = document.getElementById('rut').value;
+    const cargo = document.getElementById('cargo').value;
     const fecha = document.getElementById('fecha').value;
     const marca = document.getElementById('marca').value;
-    const chofer = document.getElementById('chofer').value;
-    const patente = document.getElementById('patente').value;
-    const rut = document.getElementById('rut').value;
     const modelo = document.getElementById('modelo').value;
+    const patente = document.getElementById('patente').value;
+    const ano = document.getElementById('ano').value;
     const kilometraje = document.getElementById('kilometraje').value;
+    const clase = document.getElementById('clase').value;
 
     const margin = 10;
     const contentWidth = 190;
@@ -295,11 +300,12 @@ function generatePDF() {
     doc.rect(margin + col1Width, yPos, col2Width, headerHeight * 4);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('CHECK LIST CAMIONETAS', margin + col1Width + col2Width/2, yPos + 9, { align: 'center' });
+    doc.text('CHECK LIST CAMIÓN', margin + col1Width + col2Width/2, yPos + 7, { align: 'center' });
+    doc.text('PLUMA', margin + col1Width + col2Width/2, yPos + 12, { align: 'center' });
     
     doc.rect(margin + col1Width + col2Width, yPos, col3Width, headerHeight);
     doc.setFontSize(8);
-    doc.text('Registro: CHECK-MOVIL-0009', margin + col1Width + col2Width + 2, yPos + 3.5);
+    doc.text('Registro: CHECK-MOVIL-0010', margin + col1Width + col2Width + 2, yPos + 3.5);
     yPos += headerHeight;
     
     doc.rect(margin + col1Width + col2Width, yPos, col3Width, headerHeight);
@@ -319,32 +325,41 @@ function generatePDF() {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     
-    // Fila 1: Fecha | Marca
+    // Fila 1: Realizada por | RUT
     doc.rect(margin, yPos, col1, dataHeight);
-    doc.text('Fecha: ' + fecha, margin + 2, yPos + 4);
+    doc.text('Realizada por: ' + realizadaPor, margin + 2, yPos + 4);
     doc.rect(margin + col1, yPos, col2, dataHeight);
-    doc.text('Marca: ' + marca, margin + col1 + 2, yPos + 4);
+    doc.text('RUT: ' + rut, margin + col1 + 2, yPos + 4);
     yPos += dataHeight;
     
-    // Fila 2: Chofer | Patente
+    // Fila 2: Cargo | Fecha
     doc.rect(margin, yPos, col1, dataHeight);
-    doc.text('Chofer: ' + chofer, margin + 2, yPos + 4);
+    doc.text('Cargo: ' + cargo, margin + 2, yPos + 4);
     doc.rect(margin + col1, yPos, col2, dataHeight);
-    doc.text('Patente: ' + patente, margin + col1 + 2, yPos + 4);
+    doc.text('Fecha: ' + fecha, margin + col1 + 2, yPos + 4);
     yPos += dataHeight;
     
-    // Fila 3: Rut | Modelo | Kilometraje
-    const col3 = (col1 + col2) / 3;
-    doc.rect(margin, yPos, col3, dataHeight);
-    doc.text('Rut: ' + rut, margin + 2, yPos + 4);
-    doc.rect(margin + col3, yPos, col3, dataHeight);
-    doc.text('Modelo: ' + modelo, margin + col3 + 2, yPos + 4);
-    doc.rect(margin + col3 * 2, yPos, col3, dataHeight);
-    doc.text('Kilometraje: ' + kilometraje, margin + col3 * 2 + 2, yPos + 4);
+    // Fila 3: Marca | Modelo | Patente | Año
+    doc.rect(margin, yPos, colVeh, dataHeight);
+    doc.text('Marca: ' + marca, margin + 2, yPos + 4);
+    doc.rect(margin + colVeh, yPos, colVeh, dataHeight);
+    doc.text('Modelo: ' + modelo, margin + colVeh + 2, yPos + 4);
+    doc.rect(margin + colVeh * 2, yPos, colVeh, dataHeight);
+    doc.text('Patente: ' + patente, margin + colVeh * 2 + 2, yPos + 4);
+    doc.rect(margin + colVeh * 3, yPos, colVeh, dataHeight);
+    doc.text('Año: ' + ano, margin + colVeh * 3 + 2, yPos + 4);
+    yPos += dataHeight;
+    
+    // Fila 4: Kilometraje | Clase
+    const halfWidth = (col1 + col2) / 2;
+    doc.rect(margin, yPos, halfWidth, dataHeight);
+    doc.text('Kilometraje: ' + kilometraje, margin + 2, yPos + 4);
+    doc.rect(margin + halfWidth, yPos, halfWidth, dataHeight);
+    doc.text('Clase: ' + clase, margin + halfWidth + 2, yPos + 4);
     yPos += dataHeight;
     
     // Firma extendida
-    const firmaHeight = headerHeight * 2 + dataHeight * 3;
+    const firmaHeight = headerHeight * 2 + dataHeight * 4;
     doc.rect(margin + col1Width + col2Width, firmaStartY, col3Width, firmaHeight);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7);
@@ -449,9 +464,7 @@ function generatePDF() {
             doc.text(na2, xPos + 2, leftY + 3);
             xPos += colW[6];
             doc.rect(xPos, leftY, colW[7], rowH);
-            if (item.name.includes('Prueba Ensayo Dieléctrico')) {
-                doc.text('vence: ' + obs, xPos + 1, leftY + 3);
-            } else if (obs) {
+            if (obs) {
                 doc.text(obs.substring(0, 20), xPos + 1, leftY + 3);
             }
             
@@ -504,9 +517,7 @@ function generatePDF() {
             doc.text(na2, xPos + 2, rightY + 3);
             xPos += colW[6];
             doc.rect(xPos, rightY, colW[7], rowH);
-            if (item.name.includes('Prueba Ensayo Dieléctrico')) {
-                doc.text('vence: ' + obs, xPos + 1, rightY + 3);
-            } else if (obs) {
+            if (obs) {
                 doc.text(obs.substring(0, 20), xPos + 1, rightY + 3);
             }
             
@@ -514,6 +525,26 @@ function generatePDF() {
             rightItemNum++;
         }
     });
+
+    // Agregar fila vacía al final de la columna derecha solo en PDF
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    xPos = rightX;
+    doc.rect(xPos, rightY, colW[0], rowH);
+    xPos += colW[0];
+    doc.rect(xPos, rightY, colW[1], rowH);
+    xPos += colW[1];
+    doc.rect(xPos, rightY, colW[2], rowH);
+    xPos += colW[2];
+    doc.rect(xPos, rightY, colW[3], rowH);
+    xPos += colW[3];
+    doc.rect(xPos, rightY, colW[4], rowH);
+    xPos += colW[4];
+    doc.rect(xPos, rightY, colW[5], rowH);
+    xPos += colW[5];
+    doc.rect(xPos, rightY, colW[6], rowH);
+    xPos += colW[6];
+    doc.rect(xPos, rightY, colW[7], rowH);
 
     yPos = tableEndY + 10;
 
@@ -547,7 +578,7 @@ function generatePDF() {
         });
     }
 
-    const fuelX = 150;
+    const fuelX = 110;
     const fuelY = tableEndY + 10;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
@@ -571,10 +602,66 @@ function generatePDF() {
     doc.line(centerX, centerY, endX, endY);
     doc.setDrawColor(0, 0, 0);
 
-    // Agregar imagen de camioneta con dibujos (solo si el usuario lo marca)
+    // Tabla CONTROL JOYSTICK al lado del aforador (más pequeña)
+    const joystickX = fuelX + 40;
+    let joystickY = fuelY;
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('Control Joystick:', joystickX, joystickY);
+    joystickY += 5;
+    
+    const colW1 = 30;
+    const colW2 = 7;
+    
+    doc.setFillColor(240, 240, 240);
+    doc.rect(joystickX, joystickY, colW1, rowH, 'F');
+    doc.setFontSize(7);
+    doc.text('CONTROL JOYSTICK', joystickX + colW1/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text('B', joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text('M', joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    
+    const joystickN = document.getElementById('joystick_n')?.value || '';
+    const joystickNB = document.getElementById('joystick_n_b')?.checked ? 'X' : '';
+    const joystickNM = document.getElementById('joystick_n_m')?.checked ? 'X' : '';
+    const bateria1B = document.getElementById('bateria1_b')?.checked ? 'X' : '';
+    const bateria1M = document.getElementById('bateria1_m')?.checked ? 'X' : '';
+    const bateria2B = document.getElementById('bateria2_b')?.checked ? 'X' : '';
+    const bateria2M = document.getElementById('bateria2_m')?.checked ? 'X' : '';
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('N° : ' + joystickN, joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(joystickNB, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(joystickNM, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('ESTADO BATERIA 1', joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(bateria1B, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(bateria1M, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('ESTADO BATERIA 2', joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(bateria2B, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(bateria2M, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+
+    // Agregar imagen de pluma con dibujos (solo si el usuario lo marca)
     const incluirDibujos = document.getElementById('incluirDibujos')?.checked;
     
-    if (camionetaCanvas && camionetaCtx && incluirDibujos) {
+    if (plumaCanvas && plumaCtx && incluirDibujos) {
         doc.addPage();
         
         // Logo en la nueva página
@@ -582,8 +669,9 @@ function generatePDF() {
         logoPage.src = '../../assets/images/logo montajes.jpg';
         doc.addImage(logoPage, 'JPEG', 10, 10, 40, 12);
         
-        // Sección DETALLES - IMPACTO CARROCERIA en la segunda página
         let yPos2 = 30;
+        
+        // Sección DETALLES - IMPACTO CARROCERIA
         doc.setFillColor(240, 240, 240);
         doc.rect(10, yPos2, 190, rowH, 'F');
         doc.setFont('helvetica', 'bold');
@@ -607,24 +695,21 @@ function generatePDF() {
         doc.text(piezaRota ? '[X] PIEZA ROTA' : '[ ] PIEZA ROTA', 10 + impactoWidth * 2 + impactoWidth/2, yPos2 + 3, { align: 'center' });
         yPos2 += rowH + 10;
         
-        const img = document.getElementById('camionetaImg');
+        // Preparar imagen del pluma con dibujos
+        const img = document.getElementById('plumaImg');
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
-        
-        tempCanvas.width = camionetaCanvas.width;
-        tempCanvas.height = camionetaCanvas.height;
-        
-        // Dibujar imagen de fondo
+        tempCanvas.width = plumaCanvas.width;
+        tempCanvas.height = plumaCanvas.height;
         tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-        // Dibujar los trazos encima
-        tempCtx.drawImage(camionetaCanvas, 0, 0);
+        tempCtx.drawImage(plumaCanvas, 0, 0);
         
-        const pdfWidth = 120;
-        const pdfHeight = (tempCanvas.height / tempCanvas.width) * pdfWidth;
+        const imgData = tempCanvas.toDataURL('image/jpeg', 0.8);
+        const imgWidth = 120;
+        const imgHeight = (tempCanvas.height / tempCanvas.width) * imgWidth;
         
-        const xCentered = (210 - pdfWidth) / 2; // A4 width is 210mm
-        const camionetaImgData = tempCanvas.toDataURL('image/jpeg', 0.8);
-        doc.addImage(camionetaImgData, 'JPEG', xCentered, yPos2, pdfWidth, pdfHeight);
+        const xCentered = (210 - imgWidth) / 2; // A4 width is 210mm
+        doc.addImage(imgData, 'JPEG', xCentered, yPos2, imgWidth, imgHeight);
     }
     
     // Agregar fotos
@@ -680,7 +765,7 @@ function generatePDF() {
         }
     }
 
-    doc.save(`CHECK-MOVIL-0009-${patente || 'CTA'}-${fecha}.pdf`);
+    doc.save(`CHECK-MOVIL-0010-${patente || 'PLUMA'}-${fecha}.pdf`);
     
     alert('✓ PDF generado exitosamente');
 }

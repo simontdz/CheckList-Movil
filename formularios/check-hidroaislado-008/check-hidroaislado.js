@@ -1,20 +1,23 @@
 const checklistItems = [
-    { section: 'DOCUMENTOS', items: ['Padrón', 'Permiso de Circulación', 'Revisión Técnica', 'Seguro Obligatorio', 'Póliza Seguro', 'Ultima Mantención', 'Prueba Ensayo Dieléctrico']},
+    { section: 'DOCUMENTOS', items: ['Padrón', 'Permiso de Circulación', 'Revisión Técnica', 'Seguro Obligatorio', 'Liner', 'Ultima Mantención', 'Prueba Ensayo Dieléctrico']},
     { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento', 'L. Trocha (izquierdo)', 'L. Trocha (derecho)', 'L. Trocha (traseras)']},
     { section: 'NEUMATICOS', items: ['Delantero Izquierdo', 'Delantero Derecho', 'Trasero Interior Izquierdo', 'Trasero Interior Derecho', 'Trasero Izquierdo', 'Trasero Derecho', 'Repuesto']},
     { section: 'VIDRIOS', items: ['Parabrisas', 'Luneta', 'Lado Izquierdo', 'Lado Derecho', 'Lateral Izquierdo', 'Lateral Derecho']},
     { section: 'ESPEJOS', items: ['Lateral Izquierdo', 'Lateral Derecho']},
-    { section: 'INTERIOR CABINA', items: ['Bocina', 'Cinturón de Seguridad', 'Aire Acondicionado', 'Calefacción', 'Relojes indicadores', 'Plumillas', 'Kit Covid-19']},
-    { section: 'KIT ANTIDERRAME', items: ['Paños absorventes', 'Calcetas absorventes', 'Bolsa de desechos', 'Gafas protectoras', 'Guantes de Nitrilo', 'Manual del usuario']},
-    { section: 'ACCESORIOS Y SEGURIDAD', items: ['Alarma de Retroceso', 'Extintor', 'Botiquín', 'Conos (12 unidades)', 'Gata', 'Barrote', 'Llave Rueda', 'Cuñas (4)', 'Almohadillas (4)', 'Mazo', 'Cable Puesta a tierra', 'prensa o mordaza', 'Barreno']},
+    { section: 'INTERIOR CABINA', items: ['Bocina', 'Cinturón de Seguridad', 'Aire Acondicionado', 'Calefacción', 'Relojes indicadores', 'Plumillas', 'Apoya Cabeza']},
+    { section: 'ACCESORIOS Y SEGURIDAD', items: ['Alarma de Retroceso', 'Extintor', 'Botiquín', 'Conos (12 unidades)', 'Gata', 'Barrote', 'Llave Rueda', 'Cuñas (4)', 'Almohadillas (4)', 'Mazo', 'Cable Puesta a tierra', 'prensa o mordaza', 'Barreno', 'Kit antiderrame']},
     { section: 'GENERAL HIDROELEVADOR', items: ['Estabilizador (F.I.)', 'Estabilizador (F.D.)', 'Estabilizador (T.I.)', 'Estabilizador (T.D.)', 'Brazo Giratorio', 'Escaleras de acceso', 'Control joystick', 'Estado canasto', 'Comandos Torre', 'Sistema Hidráulico']}
 ];
 
 let canvas, ctx, isDrawing = false;
+let hidroCanvas, hidroCtx, isHidroDrawing = false;
+let uploadedPhotos = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadChecklistItems();
     setupSignature();
+    setupHidroCanvas();
+    setupPhotoUpload();
     document.getElementById('fecha').valueAsDate = new Date();
 });
 
@@ -29,8 +32,8 @@ function loadChecklistItems() {
 
         section.items.forEach(item => {
             const row = document.createElement('tr');
-            const isEnsayoDielectrico = item.includes('Prueba Ensayo Dieléctrico');
-            const placeholder = isEnsayoDielectrico ? 'vence: dd/mm/aaaa' : '';
+            const needsVence = item.includes('Prueba Ensayo Dieléctrico') || item.includes('Liner');
+            const placeholder = needsVence ? 'vence: dd/mm/aaaa' : '';
             
             row.innerHTML = `
                 <td style="width: 35%;">${item}</td>
@@ -52,7 +55,7 @@ function setupSignature() {
     canvas = document.getElementById('signatureCanvas');
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
@@ -97,6 +100,123 @@ function handleTouch(e) {
 
 function clearSignature() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function setupHidroCanvas() {
+    const img = document.getElementById('hidroImg');
+    hidroCanvas = document.getElementById('hidroCanvas');
+    hidroCtx = hidroCanvas.getContext('2d');
+    
+    let isDrawing = false;
+    
+    function resizeCanvas() {
+        hidroCanvas.width = img.offsetWidth;
+        hidroCanvas.height = img.offsetHeight;
+    }
+    
+    img.addEventListener('load', resizeCanvas);
+    if (img.complete) resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    hidroCtx.strokeStyle = '#ff0000';
+    hidroCtx.lineWidth = 3;
+    
+    function startDrawing(e) {
+        isDrawing = true;
+        const rect = hidroCanvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        hidroCtx.beginPath();
+        hidroCtx.moveTo(x, y);
+    }
+    
+    function draw(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const rect = hidroCanvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        hidroCtx.lineTo(x, y);
+        hidroCtx.stroke();
+    }
+    
+    function stopDrawing() {
+        isDrawing = false;
+    }
+    
+    hidroCanvas.addEventListener('mousedown', startDrawing);
+    hidroCanvas.addEventListener('mousemove', draw);
+    hidroCanvas.addEventListener('mouseup', stopDrawing);
+    hidroCanvas.addEventListener('mouseout', stopDrawing);
+    hidroCanvas.addEventListener('touchstart', startDrawing, { passive: false });
+    hidroCanvas.addEventListener('touchmove', draw, { passive: false });
+    hidroCanvas.addEventListener('touchend', stopDrawing);
+    
+    document.getElementById('clearHidro').addEventListener('click', function() {
+        hidroCtx.clearRect(0, 0, hidroCanvas.width, hidroCanvas.height);
+    });
+}
+
+function setupPhotoUpload() {
+    document.getElementById('photoInput').addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        files.forEach(file => {
+            if (uploadedPhotos.length >= 16) {
+                alert('Máximo 16 fotos permitidas');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const photo = {
+                    id: Date.now() + Math.random(),
+                    src: event.target.result,
+                    rotation: 0
+                };
+                uploadedPhotos.push(photo);
+                displayPhotos();
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+}
+
+function displayPhotos() {
+    const container = document.getElementById('photoPreview');
+    container.innerHTML = '';
+    
+    uploadedPhotos.forEach((photo, index) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 mb-3';
+        
+        col.innerHTML = `
+            <div class="card">
+                <div style="height: 150px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <img src="${photo.src}" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(${photo.rotation}deg);">
+                </div>
+                <div class="card-body p-2 text-center">
+                    <button class="btn btn-sm btn-secondary me-1" onclick="rotatePhoto(${index})">↻</button>
+                    <button class="btn btn-sm btn-danger" onclick="deletePhoto(${index})">✖</button>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(col);
+    });
+}
+
+function rotatePhoto(index) {
+    uploadedPhotos[index].rotation += 90;
+    if (uploadedPhotos[index].rotation >= 360) {
+        uploadedPhotos[index].rotation = 0;
+    }
+    displayPhotos();
+}
+
+function deletePhoto(index) {
+    uploadedPhotos.splice(index, 1);
+    displayPhotos();
 }
 
 let needleAngle = 0;
@@ -351,7 +471,7 @@ function generatePDF() {
             xPos += colW[6];
             doc.rect(xPos, leftY, colW[7], rowH);
             doc.rect(xPos, leftY, colW[7], rowH);
-            if (item.name.includes('Prueba Ensayo Dieléctrico')) {
+            if (item.name.includes('Prueba Ensayo Dieléctrico') || item.name.includes('Liner')) {
                 doc.text('vence: ' + obs, xPos + 1, leftY + 3);
             } else if (obs) {
                 doc.text(obs.substring(0, 20), xPos + 1, leftY + 3);
@@ -406,7 +526,7 @@ function generatePDF() {
             doc.text(na2, xPos + 2, rightY + 3);
             xPos += colW[6];
             doc.rect(xPos, rightY, colW[7], rowH);
-            if (item.name.includes('Prueba Ensayo Dieléctrico')) {
+            if (item.name.includes('Prueba Ensayo Dieléctrico') || item.name.includes('Liner')) {
                 doc.text('vence: ' + obs, xPos + 1, rightY + 3);
             } else if (obs) {
                 doc.text(obs.substring(0, 20), xPos + 1, rightY + 3);
@@ -472,6 +592,113 @@ function generatePDF() {
     doc.setLineWidth(0.5);
     doc.line(centerX, centerY, endX, endY);
     doc.setDrawColor(0, 0, 0);
+
+    // Agregar imagen de hidro con dibujos (solo si el usuario lo marca)
+    const incluirDibujos = document.getElementById('incluirDibujos')?.checked;
+    
+    if (hidroCanvas && hidroCtx && incluirDibujos) {
+        doc.addPage();
+        
+        // Logo en la nueva página
+        const logoPage = new Image();
+        logoPage.src = '../../assets/images/logo montajes.jpg';
+        doc.addImage(logoPage, 'JPEG', 10, 10, 40, 12);
+        
+        let yPos2 = 30;
+        
+        // Sección DETALLES - IMPACTO CARROCERIA
+        doc.setFillColor(240, 240, 240);
+        doc.rect(10, yPos2, 190, rowH, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('DETALLES - IMPACTO CARROCERIA', 105, yPos2 + 3, { align: 'center' });
+        yPos2 += rowH;
+        
+        const impactoWidth = 190 / 3;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        
+        const abolladura = document.getElementById('abolladura')?.checked ? 'X' : '';
+        const rayadura = document.getElementById('rayadura')?.checked ? 'X' : '';
+        const piezaRota = document.getElementById('piezaRota')?.checked ? 'X' : '';
+        
+        doc.rect(10, yPos2, impactoWidth, rowH);
+        doc.text(abolladura ? '[X] ABOLLADURA' : '[ ] ABOLLADURA', 10 + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        doc.rect(10 + impactoWidth, yPos2, impactoWidth, rowH);
+        doc.text(rayadura ? '[X] RAYADURA' : '[ ] RAYADURA', 10 + impactoWidth + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        doc.rect(10 + impactoWidth * 2, yPos2, impactoWidth, rowH);
+        doc.text(piezaRota ? '[X] PIEZA ROTA' : '[ ] PIEZA ROTA', 10 + impactoWidth * 2 + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        yPos2 += rowH + 10;
+        
+        // Preparar imagen del hidro con dibujos
+        const img = document.getElementById('hidroImg');
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = hidroCanvas.width;
+        tempCanvas.height = hidroCanvas.height;
+        tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(hidroCanvas, 0, 0);
+        
+        const imgData = tempCanvas.toDataURL('image/jpeg', 0.8);
+        const imgWidth = 120;
+        const imgHeight = (tempCanvas.height / tempCanvas.width) * imgWidth;
+        
+        const xCentered = (210 - imgWidth) / 2; // A4 width is 210mm
+        doc.addImage(imgData, 'JPEG', xCentered, yPos2, imgWidth, imgHeight);
+    }
+    
+    // Agregar fotos
+    if (uploadedPhotos.length > 0) {
+        let photoIndex = 0;
+        
+        while (photoIndex < uploadedPhotos.length) {
+            doc.addPage();
+            
+            // Logo en cada página de fotos
+            const logoPhoto = new Image();
+            logoPhoto.src = '../../assets/images/logo montajes.jpg';
+            doc.addImage(logoPhoto, 'JPEG', 10, 10, 40, 12);
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('Evidencia:', 10, 30);
+            
+            let yPhoto = 40;
+            const photosPerRow = 2;
+            const photoWidth = 90;
+            const photoHeight = 67.5;
+            const spacing = 10;
+            
+            for (let row = 0; row < 2 && photoIndex < uploadedPhotos.length; row++) {
+                for (let col = 0; col < photosPerRow && photoIndex < uploadedPhotos.length; col++) {
+                    const photo = uploadedPhotos[photoIndex];
+                    const xPhoto = 10 + col * (photoWidth + spacing);
+                    const yPhotoPos = yPhoto + row * (photoHeight + spacing);
+                    
+                    // Crear canvas temporal para rotar la foto
+                    const tempPhotoCanvas = document.createElement('canvas');
+                    const tempPhotoCtx = tempPhotoCanvas.getContext('2d');
+                    const photoImg = new Image();
+                    photoImg.src = photo.src;
+                    
+                    if (photo.rotation === 90 || photo.rotation === 270) {
+                        tempPhotoCanvas.width = photoImg.height;
+                        tempPhotoCanvas.height = photoImg.width;
+                    } else {
+                        tempPhotoCanvas.width = photoImg.width;
+                        tempPhotoCanvas.height = photoImg.height;
+                    }
+                    
+                    tempPhotoCtx.translate(tempPhotoCanvas.width / 2, tempPhotoCanvas.height / 2);
+                    tempPhotoCtx.rotate((photo.rotation * Math.PI) / 180);
+                    tempPhotoCtx.drawImage(photoImg, -photoImg.width / 2, -photoImg.height / 2);
+                    
+                    doc.addImage(tempPhotoCanvas.toDataURL('image/jpeg', 0.8), 'JPEG', xPhoto, yPhotoPos, photoWidth, photoHeight);
+                    photoIndex++;
+                }
+            }
+        }
+    }
 
     doc.save(`CHECK-MOVIL-0008-${patente || 'HIDROAISLADO'}-${fecha}.pdf`);
     
