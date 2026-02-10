@@ -143,8 +143,8 @@ function setupCamionetaCanvas() {
     camionetaCanvas.addEventListener('mousemove', draw);
     camionetaCanvas.addEventListener('mouseup', stopDrawing);
     camionetaCanvas.addEventListener('mouseout', stopDrawing);
-    camionetaCanvas.addEventListener('touchstart', startDrawing);
-    camionetaCanvas.addEventListener('touchmove', draw);
+    camionetaCanvas.addEventListener('touchstart', startDrawing, { passive: false });
+    camionetaCanvas.addEventListener('touchmove', draw, { passive: false });
     camionetaCanvas.addEventListener('touchend', stopDrawing);
     
     document.getElementById('clearCamioneta').addEventListener('click', function() {
@@ -178,7 +178,6 @@ if (aforadorImg && needle) {
             document.addEventListener('mouseup', () => {
                 document.removeEventListener('mousemove', onMouseMove);
             }, { once: true });
-        }, { passive: false });
         });
 
         needle.addEventListener('touchstart', (e) => {
@@ -192,7 +191,6 @@ if (aforadorImg && needle) {
                 document.removeEventListener('touchmove', onTouchMove);
             }, { once: true });
         }, { passive: false });
-        });
     }
 
     if (aforadorImg.complete) {
