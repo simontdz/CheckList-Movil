@@ -55,39 +55,18 @@ function setupSignature() {
     canvas = document.getElementById('signatureCanvas');
     ctx = canvas.getContext('2d');
     
-    // Ajustar tamaño del canvas con alta resolución
-    function resizeCanvas() {
-        // Guardar el contenido actual del canvas
-        const imageData = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
-        const oldWidth = canvas.width;
-        const oldHeight = canvas.height;
-        
-        const rect = canvas.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        
-        ctx.scale(dpr, dpr);
-        
-        // Restaurar el contenido si había algo dibujado
-        if (imageData && oldWidth > 0 && oldHeight > 0) {
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = oldWidth;
-            tempCanvas.height = oldHeight;
-            tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
-            
-            ctx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
-        }
-        
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 1;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-    }
+    // Ajustar tamaño del canvas con alta resolución (solo una vez)
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
     
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    ctx.scale(dpr, dpr);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
@@ -205,7 +184,7 @@ function setupCanvas(img, canvas, ctx, id) {
     
     img.addEventListener('load', resizeCanvas);
     if (img.complete) resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    // Removido: window.addEventListener('resize', resizeCanvas);
     
     ctx.strokeStyle = '#ff0000';
     ctx.lineWidth = 3;
