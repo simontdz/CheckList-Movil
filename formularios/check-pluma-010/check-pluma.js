@@ -54,13 +54,15 @@ function setupSignature() {
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', handleTouch);
-    canvas.addEventListener('touchmove', handleTouch);
+    canvas.addEventListener('touchstart', handleTouch, { passive: false });
+    canvas.addEventListener('touchmove', handleTouch, { passive: false });
     canvas.addEventListener('touchend', stopDrawing);
 }
 
@@ -84,8 +86,11 @@ function handleTouch(e) {
     e.preventDefault();
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (touch.clientX - rect.left) * scaleX;
+    const y = (touch.clientY - rect.top) * scaleY;
+    
     if (e.type === 'touchstart') {
         isDrawing = true;
         ctx.beginPath();
@@ -108,8 +113,27 @@ function setupPlumaCanvas() {
     let isDrawing = false;
     
     function resizeCanvas() {
+        // Guardar el contenido actual del canvas
+        const imageData = plumaCtx.getImageData(0, 0, plumaCanvas.width, plumaCanvas.height);
+        const oldWidth = plumaCanvas.width;
+        const oldHeight = plumaCanvas.height;
+        
         plumaCanvas.width = img.offsetWidth;
         plumaCanvas.height = img.offsetHeight;
+        
+        // Restaurar el contenido si había algo dibujado
+        if (oldWidth > 0 && oldHeight > 0) {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = oldWidth;
+            tempCanvas.height = oldHeight;
+            tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
+            
+            plumaCtx.drawImage(tempCanvas, 0, 0, oldWidth, oldHeight, 0, 0, plumaCanvas.width, plumaCanvas.height);
+        }
+        
+        // Restaurar estilo de dibujo
+        plumaCtx.strokeStyle = '#ff0000';
+        plumaCtx.lineWidth = 3;
     }
     
     img.addEventListener('load', resizeCanvas);

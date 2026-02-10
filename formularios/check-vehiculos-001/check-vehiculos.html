@@ -12,10 +12,17 @@
         .checklist-table { width: 100%; font-size: 0.85rem; }
         @media (max-width: 768px) {
             input[type="text"], input[type="date"], input[type="number"] { font-size: 16px; }
+            input[type="date"] { 
+                max-width: 100%; 
+                padding: 2px; 
+                background-color: transparent;
+            }
             .checklist-table { font-size: 0.7rem; }
             .checklist-table th, .checklist-table td { padding: 4px 2px; }
             .header-table { font-size: 0.8rem; }
             .header-table td { padding: 4px; }
+            .header-table img { max-width: 80px !important; }
+            .header-table h4 { font-size: 0.9rem; }
         }
         input[type="text"], input[type="date"], input[type="number"], textarea { border: none; outline: none; padding: 4px; width: 100%; }
         #signatureCanvas { border: 1px solid #dee2e6; border-radius: 0.375rem; max-width: 100%; display: block; margin: 5px auto 0 auto; }
