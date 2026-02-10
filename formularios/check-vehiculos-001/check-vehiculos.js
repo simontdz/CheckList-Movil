@@ -54,6 +54,25 @@ function loadChecklistItems() {
 function setupSignature() {
     canvas = document.getElementById('signatureCanvas');
     ctx = canvas.getContext('2d');
+    
+    // Ajustar tamaño del canvas con alta resolución
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        
+        ctx.scale(dpr, dpr);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
     ctx.lineCap = 'round';
@@ -70,12 +89,14 @@ function setupSignature() {
 
 function startDrawing(e) {
     isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
     ctx.beginPath();
     ctx.moveTo(e.offsetX, e.offsetY);
 }
 
 function draw(e) {
     if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
     ctx.lineTo(e.offsetX, e.offsetY);
     ctx.stroke();
 }
@@ -88,10 +109,8 @@ function handleTouch(e) {
     e.preventDefault();
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const x = (touch.clientX - rect.left) * scaleX;
-    const y = (touch.clientY - rect.top) * scaleY;
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
     
     if (e.type === 'touchstart') {
         isDrawing = true;
