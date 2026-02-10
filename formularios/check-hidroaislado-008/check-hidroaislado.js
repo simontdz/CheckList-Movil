@@ -57,6 +57,11 @@ function setupSignature() {
     
     // Ajustar tamaño del canvas con alta resolución
     function resizeCanvas() {
+        // Guardar el contenido actual del canvas
+        const imageData = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+        const oldWidth = canvas.width;
+        const oldHeight = canvas.height;
+        
         const rect = canvas.getBoundingClientRect();
         const dpr = window.devicePixelRatio || 1;
         
@@ -64,6 +69,17 @@ function setupSignature() {
         canvas.height = rect.height * dpr;
         
         ctx.scale(dpr, dpr);
+        
+        // Restaurar el contenido si había algo dibujado
+        if (imageData && oldWidth > 0 && oldHeight > 0) {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = oldWidth;
+            tempCanvas.height = oldHeight;
+            tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
+            
+            ctx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
+        }
+        
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
         ctx.lineCap = 'round';
@@ -135,26 +151,33 @@ function setupHidroCanvas() {
     
     function resizeCanvas() {
         // Guardar el contenido actual del canvas
-        const imageData = hidroCtx.getImageData(0, 0, hidroCanvas.width, hidroCanvas.height);
+        const imageData = hidroCanvas.width > 0 ? hidroCtx.getImageData(0, 0, hidroCanvas.width, hidroCanvas.height) : null;
         const oldWidth = hidroCanvas.width;
         const oldHeight = hidroCanvas.height;
         
-        hidroCanvas.width = img.offsetWidth;
-        hidroCanvas.height = img.offsetHeight;
+        const rect = hidroCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        hidroCanvas.width = rect.width * dpr;
+        hidroCanvas.height = rect.height * dpr;
+        
+        hidroCtx.scale(dpr, dpr);
         
         // Restaurar el contenido si había algo dibujado
-        if (oldWidth > 0 && oldHeight > 0) {
+        if (imageData && oldWidth > 0 && oldHeight > 0) {
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = oldWidth;
             tempCanvas.height = oldHeight;
             tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
             
-            hidroCtx.drawImage(tempCanvas, 0, 0, oldWidth, oldHeight, 0, 0, hidroCanvas.width, hidroCanvas.height);
+            hidroCtx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
         }
         
         // Restaurar estilo de dibujo
         hidroCtx.strokeStyle = '#ff0000';
         hidroCtx.lineWidth = 3;
+        hidroCtx.lineCap = 'round';
+        hidroCtx.lineJoin = 'round';
     }
     
     img.addEventListener('load', resizeCanvas);
@@ -163,6 +186,8 @@ function setupHidroCanvas() {
     
     hidroCtx.strokeStyle = '#ff0000';
     hidroCtx.lineWidth = 3;
+    hidroCtx.lineCap = 'round';
+    hidroCtx.lineJoin = 'round';
     
     function startDrawing(e) {
         isDrawing = true;

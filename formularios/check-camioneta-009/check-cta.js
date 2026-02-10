@@ -55,6 +55,11 @@ function setupSignature() {
     
     // Ajustar tamaño del canvas con alta resolución
     function resizeCanvas() {
+        // Guardar el contenido actual del canvas
+        const imageData = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+        const oldWidth = canvas.width;
+        const oldHeight = canvas.height;
+        
         const rect = canvas.getBoundingClientRect();
         const dpr = window.devicePixelRatio || 1;
         
@@ -62,6 +67,17 @@ function setupSignature() {
         canvas.height = rect.height * dpr;
         
         ctx.scale(dpr, dpr);
+        
+        // Restaurar el contenido si había algo dibujado
+        if (imageData && oldWidth > 0 && oldHeight > 0) {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = oldWidth;
+            tempCanvas.height = oldHeight;
+            tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
+            
+            ctx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
+        }
+        
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
         ctx.lineCap = 'round';
@@ -131,26 +147,33 @@ function setupCamionetaCanvas() {
     
     function resizeCanvas() {
         // Guardar el contenido actual del canvas
-        const imageData = camionetaCtx.getImageData(0, 0, camionetaCanvas.width, camionetaCanvas.height);
+        const imageData = camionetaCanvas.width > 0 ? camionetaCtx.getImageData(0, 0, camionetaCanvas.width, camionetaCanvas.height) : null;
         const oldWidth = camionetaCanvas.width;
         const oldHeight = camionetaCanvas.height;
         
-        camionetaCanvas.width = img.offsetWidth;
-        camionetaCanvas.height = img.offsetHeight;
+        const rect = camionetaCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        camionetaCanvas.width = rect.width * dpr;
+        camionetaCanvas.height = rect.height * dpr;
+        
+        camionetaCtx.scale(dpr, dpr);
         
         // Restaurar el contenido si había algo dibujado
-        if (oldWidth > 0 && oldHeight > 0) {
+        if (imageData && oldWidth > 0 && oldHeight > 0) {
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = oldWidth;
             tempCanvas.height = oldHeight;
             tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
             
-            camionetaCtx.drawImage(tempCanvas, 0, 0, oldWidth, oldHeight, 0, 0, camionetaCanvas.width, camionetaCanvas.height);
+            camionetaCtx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
         }
         
         // Restaurar estilo de dibujo
         camionetaCtx.strokeStyle = '#ff0000';
         camionetaCtx.lineWidth = 3;
+        camionetaCtx.lineCap = 'round';
+        camionetaCtx.lineJoin = 'round';
     }
     
     img.addEventListener('load', resizeCanvas);
@@ -159,6 +182,8 @@ function setupCamionetaCanvas() {
     
     camionetaCtx.strokeStyle = '#ff0000';
     camionetaCtx.lineWidth = 3;
+    camionetaCtx.lineCap = 'round';
+    camionetaCtx.lineJoin = 'round';
     
     function startDrawing(e) {
         isCamionetaDrawing = true;
