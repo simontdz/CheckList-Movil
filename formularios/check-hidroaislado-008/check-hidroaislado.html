@@ -9,7 +9,13 @@
     <style>
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .header-table td { border: 1px solid #000; padding: 8px; }
-        .checklist-table { min-width: 800px; }
+        .checklist-table { width: 100%; font-size: 0.85rem; }
+        @media (max-width: 768px) {
+            .checklist-table { font-size: 0.7rem; }
+            .checklist-table th, .checklist-table td { padding: 4px 2px; }
+            .header-table { font-size: 0.8rem; }
+            .header-table td { padding: 4px; }
+        }
         input[type="text"], input[type="date"], input[type="number"], textarea { border: none; outline: none; padding: 4px; width: 100%; }
         @media print { .no-print { display: none; } }
     </style>

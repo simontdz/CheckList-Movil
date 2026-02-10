@@ -129,7 +129,11 @@ if (aforadorImg && needle) {
 
         needle.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            const touch = e.touches[0];
+            handleMove(touch.clientX, touch.clientY);
+            
             function onTouchMove(e) {
+                e.preventDefault();
                 const touch = e.touches[0];
                 handleMove(touch.clientX, touch.clientY);
             }
@@ -137,7 +141,7 @@ if (aforadorImg && needle) {
             document.addEventListener('touchend', () => {
                 document.removeEventListener('touchmove', onTouchMove);
             }, { once: true });
-        });
+        }, { passive: false });
     }
 
     if (aforadorImg.complete) {

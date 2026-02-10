@@ -20,7 +20,27 @@
         }
 
         .checklist-table {
-            min-width: 800px;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .checklist-table {
+                font-size: 0.75rem;
+            }
+            
+            .checklist-table th,
+            .checklist-table td {
+                padding: 4px 2px;
+            }
+            
+            .header-table {
+                font-size: 0.8rem;
+            }
+            
+            .header-table td {
+                padding: 4px;
+            }
         }
 
         input[type="text"],
