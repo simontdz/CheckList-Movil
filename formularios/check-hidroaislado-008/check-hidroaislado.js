@@ -702,12 +702,24 @@ function generatePDF() {
         const img = document.getElementById('hidroImg');
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
+        
+        // Usar el tamaño real del canvas (con DPR)
         tempCanvas.width = hidroCanvas.width;
         tempCanvas.height = hidroCanvas.height;
-        tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // Escalar el contexto para que coincida con el DPR
+        const dpr = window.devicePixelRatio || 1;
+        tempCtx.scale(dpr, dpr);
+        
+        // Dibujar la imagen de fondo
+        const rect = hidroCanvas.getBoundingClientRect();
+        tempCtx.drawImage(img, 0, 0, rect.width, rect.height);
+        
+        // Dibujar el canvas de dibujos encima (sin escalar porque ya tiene DPR)
+        tempCtx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
         tempCtx.drawImage(hidroCanvas, 0, 0);
         
-        const imgData = tempCanvas.toDataURL('image/jpeg', 0.8);
+        const imgData = tempCanvas.toDataURL('image/jpeg', 0.95);
         const imgWidth = 120;
         const imgHeight = (tempCanvas.height / tempCanvas.width) * imgWidth;
         

@@ -700,13 +700,18 @@ function generatePDF() {
         doc.text(piezaRota ? '[X] PIEZA ROTA' : '[ ] PIEZA ROTA', 10 + impactoWidth * 2 + impactoWidth/2, yPos2 + 3, { align: 'center' });
         yPos2 += rowH + 10;
         
+        const dpr = window.devicePixelRatio || 1;
+        
         // Preparar las 3 imágenes
         const img1 = document.getElementById('furgonImg1');
         const tempCanvas1 = document.createElement('canvas');
         const tempCtx1 = tempCanvas1.getContext('2d');
         tempCanvas1.width = furgonCanvas1.width;
         tempCanvas1.height = furgonCanvas1.height;
-        tempCtx1.drawImage(img1, 0, 0, tempCanvas1.width, tempCanvas1.height);
+        tempCtx1.scale(dpr, dpr);
+        const rect1 = furgonCanvas1.getBoundingClientRect();
+        tempCtx1.drawImage(img1, 0, 0, rect1.width, rect1.height);
+        tempCtx1.setTransform(1, 0, 0, 1, 0, 0);
         tempCtx1.drawImage(furgonCanvas1, 0, 0);
         
         const img2 = document.getElementById('furgonImg2');
@@ -714,7 +719,10 @@ function generatePDF() {
         const tempCtx2 = tempCanvas2.getContext('2d');
         tempCanvas2.width = furgonCanvas2.width;
         tempCanvas2.height = furgonCanvas2.height;
-        tempCtx2.drawImage(img2, 0, 0, tempCanvas2.width, tempCanvas2.height);
+        tempCtx2.scale(dpr, dpr);
+        const rect2 = furgonCanvas2.getBoundingClientRect();
+        tempCtx2.drawImage(img2, 0, 0, rect2.width, rect2.height);
+        tempCtx2.setTransform(1, 0, 0, 1, 0, 0);
         tempCtx2.drawImage(furgonCanvas2, 0, 0);
         
         const img3 = document.getElementById('furgonImg3');
@@ -722,7 +730,10 @@ function generatePDF() {
         const tempCtx3 = tempCanvas3.getContext('2d');
         tempCanvas3.width = furgonCanvas3.width;
         tempCanvas3.height = furgonCanvas3.height;
-        tempCtx3.drawImage(img3, 0, 0, tempCanvas3.width, tempCanvas3.height);
+        tempCtx3.scale(dpr, dpr);
+        const rect3 = furgonCanvas3.getBoundingClientRect();
+        tempCtx3.drawImage(img3, 0, 0, rect3.width, rect3.height);
+        tempCtx3.setTransform(1, 0, 0, 1, 0, 0);
         tempCtx3.drawImage(furgonCanvas3, 0, 0);
         
         // Imagen 1 - Vista Frontal (izquierda, pequeña)
@@ -731,19 +742,19 @@ function generatePDF() {
         doc.text('Vista Frontal', 15, yPos2);
         const pdfWidth1 = 45;
         const pdfHeight1 = (tempCanvas1.height / tempCanvas1.width) * pdfWidth1;
-        doc.addImage(tempCanvas1.toDataURL('image/jpeg', 0.8), 'JPEG', 10, yPos2 + 3, pdfWidth1, pdfHeight1);
+        doc.addImage(tempCanvas1.toDataURL('image/jpeg', 0.95), 'JPEG', 10, yPos2 + 3, pdfWidth1, pdfHeight1);
         
         // Imagen 2 - Vista Lateral (centro, grande)
         doc.text('Vista Lateral', 95, yPos2, { align: 'center' });
         const pdfWidth2 = 90;
         const pdfHeight2 = (tempCanvas2.height / tempCanvas2.width) * pdfWidth2;
-        doc.addImage(tempCanvas2.toDataURL('image/jpeg', 0.8), 'JPEG', 60, yPos2 + 3, pdfWidth2, pdfHeight2);
+        doc.addImage(tempCanvas2.toDataURL('image/jpeg', 0.95), 'JPEG', 60, yPos2 + 3, pdfWidth2, pdfHeight2);
         
         // Imagen 3 - Vista Trasera (derecha, pequeña)
         doc.text('Vista Trasera', 185, yPos2);
         const pdfWidth3 = 45;
         const pdfHeight3 = (tempCanvas3.height / tempCanvas3.width) * pdfWidth3;
-        doc.addImage(tempCanvas3.toDataURL('image/jpeg', 0.8), 'JPEG', 155, yPos2 + 3, pdfWidth3, pdfHeight3);
+        doc.addImage(tempCanvas3.toDataURL('image/jpeg', 0.95), 'JPEG', 155, yPos2 + 3, pdfWidth3, pdfHeight3);
     }
 
     // Agregar fotos

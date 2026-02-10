@@ -679,19 +679,27 @@ function generatePDF() {
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
         
+        // Usar el tamaño real del canvas (con DPR)
         tempCanvas.width = camionetaCanvas.width;
         tempCanvas.height = camionetaCanvas.height;
         
-        // Dibujar imagen de fondo
-        tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-        // Dibujar los trazos encima
+        // Escalar el contexto para que coincida con el DPR
+        const dpr = window.devicePixelRatio || 1;
+        tempCtx.scale(dpr, dpr);
+        
+        // Dibujar la imagen de fondo
+        const rect = camionetaCanvas.getBoundingClientRect();
+        tempCtx.drawImage(img, 0, 0, rect.width, rect.height);
+        
+        // Dibujar el canvas de dibujos encima (sin escalar porque ya tiene DPR)
+        tempCtx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
         tempCtx.drawImage(camionetaCanvas, 0, 0);
         
         const pdfWidth = 120;
         const pdfHeight = (tempCanvas.height / tempCanvas.width) * pdfWidth;
         
         const xCentered = (210 - pdfWidth) / 2; // A4 width is 210mm
-        const camionetaImgData = tempCanvas.toDataURL('image/jpeg', 0.8);
+        const camionetaImgData = tempCanvas.toDataURL('image/jpeg', 0.95);
         doc.addImage(camionetaImgData, 'JPEG', xCentered, yPos2, pdfWidth, pdfHeight);
     }
     
