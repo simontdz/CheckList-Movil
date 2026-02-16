@@ -26,11 +26,11 @@
         }
         input[type="text"], input[type="date"], input[type="number"], textarea { border: none; outline: none; padding: 4px; width: 100%; }
         #signatureCanvas { border: 1px solid #dee2e6; border-radius: 0.375rem; max-width: 100%; display: block; margin: 5px auto 0 auto; }
-        .hidro-container { position: relative; display: inline-block; border: 1px solid #ccc; width: 50%; margin: 0 auto; display: block; }
+        .hidro-container { position: relative; display: inline-block; width: 100%; max-width: 600px; margin: 0 auto; display: block; }
         .firma-header-col { display: none; } /* Ocultar firma en header HTML */
         @media (max-width: 768px) {
             #signatureCanvas { height: 300px !important; }
-            .hidro-container { width: 100% !important; }
+            .hidro-container { max-width: 100%; }
         }
         @media print { 
             .no-print { display: none; }
@@ -92,7 +92,7 @@
 
             <div class="table-responsive">
                 <table class="table table-bordered checklist-table">
-                    <thead>
+                    <thead style="display: none;">
                         <tr>
                             <th>REQUERIMIENTO</th>
                             <th>SI</th>
@@ -140,7 +140,7 @@
                 </div>
                 <div class="col-12 mb-3">
                     <div class="hidro-container">
-                        <img id="hidroImg" src="../../assets/images/camion hidro.JPG" style="width: 100%; height: auto; display: block;">
+                        <img id="hidroImg" src="../../assets/images/hidro.png" style="width: 100%; height: auto; display: block;">
                         <canvas id="hidroCanvas" style="position: absolute; top: 0; left: 0; cursor: crosshair; width: 100%; height: 100%;"></canvas>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
                         <div class="text-center">
                             <div style="position: relative; display: inline-block;">
                                 <img id="aforadorImg" src="../../assets/images/aforador2.png" style="width: 150px; height: auto; display: block;">
-                                <div id="fuelNeedle" style="position: absolute; width: 3px; height: 50px; background: red; transform-origin: bottom center; left: 47%; top: 30%; cursor: grab; border-radius: 2px; z-index: 10;"></div>
+                                <div id="fuelNeedle" style="position: absolute; width: 3px; height: 50px; background: red; transform-origin: bottom center; left: 49%; top: 30%; cursor: grab; border-radius: 2px; z-index: 10;"></div>
                             </div>
                         </div>
                     </div>

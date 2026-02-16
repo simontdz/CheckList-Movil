@@ -8,9 +8,7 @@ const checklistItems = [
 ];
 
 let canvas, ctx, isDrawing = false;
-let furgonCanvas1, furgonCtx1, isFurgon1Drawing = false;
-let furgonCanvas2, furgonCtx2, isFurgon2Drawing = false;
-let furgonCanvas3, furgonCtx3, isFurgon3Drawing = false;
+let furgonCanvas, furgonCtx, isFurgonDrawing = false;
 let uploadedPhotos = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -26,8 +24,23 @@ function loadChecklistItems() {
     let itemNumber = 1;
 
     checklistItems.forEach(section => {
+        // Fila de encabezado de columnas antes de cada sección
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+        `;
+        tbody.appendChild(headerRow);
+        
+        // Fila de sección
         const sectionRow = document.createElement('tr');
-        sectionRow.innerHTML = `<td colspan="8" style="background-color: #e9ecef; font-weight: bold; text-align: center;">${section.section}</td>`;
+        sectionRow.innerHTML = `<td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">${section.section}</td>`;
         tbody.appendChild(sectionRow);
 
         section.items.forEach(item => {
@@ -122,29 +135,13 @@ function clearSignature() {
 }
 
 function setupFurgonCanvas() {
-    // Setup para canvas 1
-    const img1 = document.getElementById('furgonImg1');
-    furgonCanvas1 = document.getElementById('furgonCanvas1');
-    furgonCtx1 = furgonCanvas1.getContext('2d');
-    setupCanvas(img1, furgonCanvas1, furgonCtx1, 'furgon1');
+    const img = document.getElementById('furgonImg');
+    furgonCanvas = document.getElementById('furgonCanvas');
+    furgonCtx = furgonCanvas.getContext('2d');
+    setupCanvas(img, furgonCanvas, furgonCtx, 'furgon');
     
-    // Setup para canvas 2
-    const img2 = document.getElementById('furgonImg2');
-    furgonCanvas2 = document.getElementById('furgonCanvas2');
-    furgonCtx2 = furgonCanvas2.getContext('2d');
-    setupCanvas(img2, furgonCanvas2, furgonCtx2, 'furgon2');
-    
-    // Setup para canvas 3
-    const img3 = document.getElementById('furgonImg3');
-    furgonCanvas3 = document.getElementById('furgonCanvas3');
-    furgonCtx3 = furgonCanvas3.getContext('2d');
-    setupCanvas(img3, furgonCanvas3, furgonCtx3, 'furgon3');
-    
-    // Botón limpiar todos
     document.getElementById('clearFurgon').addEventListener('click', function() {
-        furgonCtx1.clearRect(0, 0, furgonCanvas1.width, furgonCanvas1.height);
-        furgonCtx2.clearRect(0, 0, furgonCanvas2.width, furgonCanvas2.height);
-        furgonCtx3.clearRect(0, 0, furgonCanvas3.width, furgonCanvas3.height);
+        furgonCtx.clearRect(0, 0, furgonCanvas.width, furgonCanvas.height);
     });
 }
 
@@ -152,7 +149,6 @@ function setupCanvas(img, canvas, ctx, id) {
     let isDrawing = false;
     
     function resizeCanvas() {
-        // Guardar el contenido actual del canvas
         const imageData = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
         const oldWidth = canvas.width;
         const oldHeight = canvas.height;
@@ -165,7 +161,6 @@ function setupCanvas(img, canvas, ctx, id) {
         
         ctx.scale(dpr, dpr);
         
-        // Restaurar el contenido si había algo dibujado
         if (imageData && oldWidth > 0 && oldHeight > 0) {
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = oldWidth;
@@ -175,7 +170,6 @@ function setupCanvas(img, canvas, ctx, id) {
             ctx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
         }
         
-        // Restaurar estilo de dibujo
         ctx.strokeStyle = '#ff0000';
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';
@@ -184,7 +178,6 @@ function setupCanvas(img, canvas, ctx, id) {
     
     img.addEventListener('load', resizeCanvas);
     if (img.complete) resizeCanvas();
-    // Removido: window.addEventListener('resize', resizeCanvas);
     
     ctx.strokeStyle = '#ff0000';
     ctx.lineWidth = 3;
@@ -586,7 +579,10 @@ function generatePDF() {
         }
     });
 
-    yPos = tableEndY + 10;
+    // Usar la posición real donde terminó la tabla
+    const actualTableEnd = Math.max(yPos, rightY);
+    const observacionesY = actualTableEnd + 6;
+    yPos = observacionesY;
 
     const observaciones = document.getElementById('observacionesGenerales').value;
     doc.setFont('helvetica', 'bold');
@@ -618,8 +614,8 @@ function generatePDF() {
         });
     }
 
-    const fuelX = 150;
-    const fuelY = tableEndY + 10;
+    const fuelX = 143;
+    const fuelY = observacionesY;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.text('Nivel de combustible:', fuelX, fuelY);
@@ -629,8 +625,8 @@ function generatePDF() {
     doc.addImage(aforador, 'PNG', fuelX, fuelY + 5, 25, 18);
     
     const centerX = fuelX + 12.5;
-    const centerY = fuelY + 5 + 13;
-    const needleLength = 11;
+    const centerY = fuelY + 5 + 14;
+    const needleLength = 9;
     
     const adjustedAngle = needleAngle - 90;
     const radians = (adjustedAngle * Math.PI) / 180;
@@ -645,7 +641,7 @@ function generatePDF() {
     // Agregar imágenes de furgón con dibujos (solo si el usuario lo marca)
     const incluirDibujos = document.getElementById('incluirDibujos')?.checked;
     
-    if (furgonCanvas1 && furgonCtx1 && incluirDibujos) {
+    if (furgonCanvas && furgonCtx && incluirDibujos) {
         doc.addPage();
         
         // Logo en la nueva página
@@ -679,61 +675,38 @@ function generatePDF() {
         doc.text(piezaRota ? '[X] PIEZA ROTA' : '[ ] PIEZA ROTA', 10 + impactoWidth * 2 + impactoWidth/2, yPos2 + 3, { align: 'center' });
         yPos2 += rowH + 10;
         
+        // Resetear estilos de línea
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(0.1);
+        
         const dpr = window.devicePixelRatio || 1;
         
-        // Preparar las 3 imágenes
-        const img1 = document.getElementById('furgonImg1');
-        const tempCanvas1 = document.createElement('canvas');
-        const tempCtx1 = tempCanvas1.getContext('2d');
-        tempCanvas1.width = furgonCanvas1.width;
-        tempCanvas1.height = furgonCanvas1.height;
-        tempCtx1.scale(dpr, dpr);
-        const rect1 = furgonCanvas1.getBoundingClientRect();
-        tempCtx1.drawImage(img1, 0, 0, rect1.width, rect1.height);
-        tempCtx1.setTransform(1, 0, 0, 1, 0, 0);
-        tempCtx1.drawImage(furgonCanvas1, 0, 0);
+        // Preparar imagen del furgón con dibujos
+        const img = document.getElementById('furgonImg');
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
         
-        const img2 = document.getElementById('furgonImg2');
-        const tempCanvas2 = document.createElement('canvas');
-        const tempCtx2 = tempCanvas2.getContext('2d');
-        tempCanvas2.width = furgonCanvas2.width;
-        tempCanvas2.height = furgonCanvas2.height;
-        tempCtx2.scale(dpr, dpr);
-        const rect2 = furgonCanvas2.getBoundingClientRect();
-        tempCtx2.drawImage(img2, 0, 0, rect2.width, rect2.height);
-        tempCtx2.setTransform(1, 0, 0, 1, 0, 0);
-        tempCtx2.drawImage(furgonCanvas2, 0, 0);
+        tempCanvas.width = furgonCanvas.width;
+        tempCanvas.height = furgonCanvas.height;
         
-        const img3 = document.getElementById('furgonImg3');
-        const tempCanvas3 = document.createElement('canvas');
-        const tempCtx3 = tempCanvas3.getContext('2d');
-        tempCanvas3.width = furgonCanvas3.width;
-        tempCanvas3.height = furgonCanvas3.height;
-        tempCtx3.scale(dpr, dpr);
-        const rect3 = furgonCanvas3.getBoundingClientRect();
-        tempCtx3.drawImage(img3, 0, 0, rect3.width, rect3.height);
-        tempCtx3.setTransform(1, 0, 0, 1, 0, 0);
-        tempCtx3.drawImage(furgonCanvas3, 0, 0);
+        // Fondo blanco para evitar transparencias
+        tempCtx.fillStyle = '#FFFFFF';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
         
-        // Imagen 1 - Vista Frontal (izquierda, pequeña)
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8);
-        doc.text('Vista Frontal', 15, yPos2);
-        const pdfWidth1 = 45;
-        const pdfHeight1 = (tempCanvas1.height / tempCanvas1.width) * pdfWidth1;
-        doc.addImage(tempCanvas1.toDataURL('image/jpeg', 0.95), 'JPEG', 10, yPos2 + 3, pdfWidth1, pdfHeight1);
+        tempCtx.scale(dpr, dpr);
         
-        // Imagen 2 - Vista Lateral (centro, grande)
-        doc.text('Vista Lateral', 95, yPos2, { align: 'center' });
-        const pdfWidth2 = 90;
-        const pdfHeight2 = (tempCanvas2.height / tempCanvas2.width) * pdfWidth2;
-        doc.addImage(tempCanvas2.toDataURL('image/jpeg', 0.95), 'JPEG', 60, yPos2 + 3, pdfWidth2, pdfHeight2);
+        const rect = furgonCanvas.getBoundingClientRect();
+        tempCtx.drawImage(img, 0, 0, rect.width, rect.height);
         
-        // Imagen 3 - Vista Trasera (derecha, pequeña)
-        doc.text('Vista Trasera', 185, yPos2);
-        const pdfWidth3 = 45;
-        const pdfHeight3 = (tempCanvas3.height / tempCanvas3.width) * pdfWidth3;
-        doc.addImage(tempCanvas3.toDataURL('image/jpeg', 0.95), 'JPEG', 155, yPos2 + 3, pdfWidth3, pdfHeight3);
+        tempCtx.setTransform(1, 0, 0, 1, 0, 0);
+        tempCtx.drawImage(furgonCanvas, 0, 0);
+        
+        const imgData = tempCanvas.toDataURL('image/jpeg', 0.95);
+        const imgWidth = 120;
+        const imgHeight = (tempCanvas.height / tempCanvas.width) * imgWidth;
+        
+        const xCentered = (210 - imgWidth) / 2;
+        doc.addImage(imgData, 'JPEG', xCentered, yPos2, imgWidth, imgHeight);
     }
 
     // Agregar fotos

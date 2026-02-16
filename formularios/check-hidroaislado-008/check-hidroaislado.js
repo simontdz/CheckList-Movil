@@ -26,8 +26,23 @@ function loadChecklistItems() {
     let itemNumber = 1;
 
     checklistItems.forEach(section => {
+        // Fila de encabezado de columnas antes de cada sección
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+        `;
+        tbody.appendChild(headerRow);
+        
+        // Fila de sección
         const sectionRow = document.createElement('tr');
-        sectionRow.innerHTML = `<td colspan="8" style="background-color: #e9ecef; font-weight: bold; text-align: center;">${section.section}</td>`;
+        sectionRow.innerHTML = `<td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">${section.section}</td>`;
         tbody.appendChild(sectionRow);
 
         section.items.forEach(item => {
@@ -584,7 +599,10 @@ function generatePDF() {
         }
     });
 
-    yPos = tableEndY + 10;
+    // Usar la posición real donde terminó la tabla
+    const actualTableEnd = Math.max(yPos, rightY);
+    const observacionesY = actualTableEnd + 6;
+    yPos = observacionesY;
 
     const observaciones = document.getElementById('observacionesGenerales').value;
     doc.setFont('helvetica', 'bold');
@@ -616,8 +634,8 @@ function generatePDF() {
         });
     }
 
-    const fuelX = 150;
-    const fuelY = tableEndY + 10;
+    const fuelX = 143;
+    const fuelY = observacionesY;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.text('Nivel de combustible:', fuelX, fuelY);
@@ -627,8 +645,8 @@ function generatePDF() {
     doc.addImage(aforador, 'PNG', fuelX, fuelY + 5, 25, 18);
     
     const centerX = fuelX + 12.5;
-    const centerY = fuelY + 5 + 13;
-    const needleLength = 11;
+    const centerY = fuelY + 5 + 14;
+    const needleLength = 9;
     
     const adjustedAngle = needleAngle - 90;
     const radians = (adjustedAngle * Math.PI) / 180;
@@ -685,6 +703,10 @@ function generatePDF() {
         // Usar el tamaño real del canvas (con DPR)
         tempCanvas.width = hidroCanvas.width;
         tempCanvas.height = hidroCanvas.height;
+        
+        // Fondo blanco para evitar transparencias
+        tempCtx.fillStyle = '#FFFFFF';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
         
         // Escalar el contexto para que coincida con el DPR
         const dpr = window.devicePixelRatio || 1;
