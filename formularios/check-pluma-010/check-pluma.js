@@ -1,0 +1,868 @@
+const checklistItems = [
+    { section: 'DOCUMENTOS', items: ['Padrón', 'Permiso de Circulación', 'Revisión Técnica', 'Seguro Obligatorio', 'Certificado de Operatividad', 'Certificado de Mantención', 'Certificado Capacho', 'Ultima Mantención', 'Tabla de Cargas']},
+    { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento', 'L. Trocha (izquierdo)', 'L. Trocha (derecho)', 'L. Trocha (traseras)']},
+    { section: 'NEUMATICOS', items: ['Delantero Izquierdo', 'Delantero Derecho', 'Trasero Interior Izquierdo', 'Trasero Interior Derecho', 'Trasero Izquierdo', 'Trasero Derecho', 'Repuesto']},
+    { section: 'VIDRIOS', items: ['Parabrisas', 'Luneta', 'Lado Izquierdo', 'Lado Derecho', 'Lateral Izquierdo', 'Lateral Derecho']},
+    { section: 'ESPEJOS', items: ['Lateral Izquierdo', 'Lateral Derecho']},
+    { section: 'INTERIOR CABINA', items: ['Bocina', 'Cinturón de Seguridad', 'Aire Acondicionado', 'Calefacción', 'Relojes indicadores', 'Plumillas']},
+    { section: 'ACCESORIOS Y SEGURIDAD', items: ['Alarma de Retroceso', 'Extintor', 'Botiquín', 'Conos (12 unidades)', 'Gata', 'Barrote', 'Llave Rueda', 'Cuñas (4)', 'Almohadillas (4)', 'Mazo', 'Cable Puesta a tierra', 'prensa o mordaza', 'Barreno', 'Kit Antiderrame']},
+    { section: 'GENERAL PLUMA', items: ['Estabilizador (F.I.)', 'Estabilizador (F.D.)', 'Estabilizador (T.I.)', 'Estabilizador (T.D.)', 'Brazo Giratorio', 'Escaleras de acceso', 'Control joystick', 'Estado canasto', 'Comandos Torre', 'Sistema Hidráulico', 'Baterías Joystick', 'Cargador Joystick']}
+];
+
+let canvas, ctx, isDrawing = false;
+let plumaCanvas, plumaCtx, isPlumaDrawing = false;
+let uploadedPhotos = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    setupSignature();
+    setupPlumaCanvas();
+    setupPhotoUpload();
+    document.getElementById('fecha').valueAsDate = new Date();
+});
+
+
+function setupSignature() {
+    canvas = document.getElementById('signatureCanvas');
+    ctx = canvas.getContext('2d');
+    
+    // Ajustar tamaño del canvas con alta resolución (solo una vez)
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    ctx.scale(dpr, dpr);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    canvas.addEventListener('touchstart', handleTouch, { passive: false });
+    canvas.addEventListener('touchmove', handleTouch, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing);
+}
+
+function startDrawing(e) {
+    isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+}
+
+function stopDrawing() {
+    isDrawing = false;
+}
+
+function handleTouch(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    
+    if (e.type === 'touchstart') {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    } else if (e.type === 'touchmove' && isDrawing) {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+}
+
+function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function setupPlumaCanvas() {
+    const img = document.getElementById('plumaImg');
+    plumaCanvas = document.getElementById('plumaCanvas');
+    plumaCtx = plumaCanvas.getContext('2d');
+    
+    let isDrawing = false;
+    
+    function resizeCanvas() {
+        // Guardar el contenido actual del canvas
+        const imageData = plumaCanvas.width > 0 ? plumaCtx.getImageData(0, 0, plumaCanvas.width, plumaCanvas.height) : null;
+        const oldWidth = plumaCanvas.width;
+        const oldHeight = plumaCanvas.height;
+        
+        const rect = plumaCanvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        plumaCanvas.width = rect.width * dpr;
+        plumaCanvas.height = rect.height * dpr;
+        
+        plumaCtx.scale(dpr, dpr);
+        
+        // Restaurar el contenido si había algo dibujado
+        if (imageData && oldWidth > 0 && oldHeight > 0) {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = oldWidth;
+            tempCanvas.height = oldHeight;
+            tempCanvas.getContext('2d').putImageData(imageData, 0, 0);
+            
+            plumaCtx.drawImage(tempCanvas, 0, 0, oldWidth / dpr, oldHeight / dpr, 0, 0, rect.width, rect.height);
+        }
+        
+        // Restaurar estilo de dibujo
+        plumaCtx.strokeStyle = '#ff0000';
+        plumaCtx.lineWidth = 3;
+        plumaCtx.lineCap = 'round';
+        plumaCtx.lineJoin = 'round';
+    }
+    
+    img.addEventListener('load', resizeCanvas);
+    if (img.complete) resizeCanvas();
+    // Removido: window.addEventListener('resize', resizeCanvas);
+    
+    plumaCtx.strokeStyle = '#ff0000';
+    plumaCtx.lineWidth = 3;
+    plumaCtx.lineCap = 'round';
+    plumaCtx.lineJoin = 'round';
+    
+    function startDrawing(e) {
+        isDrawing = true;
+        const rect = plumaCanvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        plumaCtx.beginPath();
+        plumaCtx.moveTo(x, y);
+    }
+    
+    function draw(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const rect = plumaCanvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        plumaCtx.lineTo(x, y);
+        plumaCtx.stroke();
+    }
+    
+    function stopDrawing() {
+        isDrawing = false;
+    }
+    
+    plumaCanvas.addEventListener('mousedown', startDrawing);
+    plumaCanvas.addEventListener('mousemove', draw);
+    plumaCanvas.addEventListener('mouseup', stopDrawing);
+    plumaCanvas.addEventListener('mouseout', stopDrawing);
+    plumaCanvas.addEventListener('touchstart', startDrawing, { passive: false });
+    plumaCanvas.addEventListener('touchmove', draw, { passive: false });
+    plumaCanvas.addEventListener('touchend', stopDrawing);
+    
+    document.getElementById('clearPluma').addEventListener('click', function() {
+        plumaCtx.clearRect(0, 0, plumaCanvas.width, plumaCanvas.height);
+    });
+}
+
+function setupPhotoUpload() {
+    const captureInput = document.getElementById('photoCaptureInput');
+    const galleryInput = document.getElementById('photoGalleryInput');
+
+    captureInput.addEventListener('change', handlePhotoFiles);
+    galleryInput.addEventListener('change', handlePhotoFiles);
+}
+
+function handlePhotoFiles(e) {
+    const files = Array.from(e.target.files);
+
+    files.forEach(file => {
+        if (uploadedPhotos.length >= 16) {
+            alert('Máximo 16 fotos permitidas');
+            return;
+        }
+
+        processPhoto(file).then(dataUrl => {
+            const photo = {
+                id: Date.now() + Math.random(),
+                src: dataUrl,
+                rotation: 0
+            };
+            uploadedPhotos.push(photo);
+            displayPhotos();
+        }).catch(err => {
+            console.error('Error procesando foto:', err);
+            alert('Error al procesar la foto. Intente nuevamente.');
+        });
+    });
+
+    // Reset input para permitir seleccionar la misma foto otra vez
+    e.target.value = '';
+}
+
+function processPhoto(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Error leyendo archivo'));
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onerror = () => reject(new Error('Error cargando imagen'));
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const MAX_SIZE = 1200;
+
+                let width = img.width;
+                let height = img.height;
+
+                // Redimensionar si es muy grande
+                if (width > MAX_SIZE || height > MAX_SIZE) {
+                    if (width > height) {
+                        height = Math.round((height * MAX_SIZE) / width);
+                        width = MAX_SIZE;
+                    } else {
+                        width = Math.round((width * MAX_SIZE) / height);
+                        height = MAX_SIZE;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Comprimir como JPEG al 80% de calidad
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                resolve(dataUrl);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function displayPhotos() {
+    const container = document.getElementById('photoPreview');
+    container.innerHTML = '';
+    
+    uploadedPhotos.forEach((photo, index) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 mb-3';
+        
+        col.innerHTML = `
+            <div class="card">
+                <div style="height: 150px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <img src="${photo.src}" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(${photo.rotation}deg);">
+                </div>
+                <div class="card-body p-2 text-center">
+                    <button class="btn btn-sm btn-secondary me-1" onclick="rotatePhoto(${index})">↻</button>
+                    <button class="btn btn-sm btn-danger" onclick="deletePhoto(${index})">✖</button>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(col);
+    });
+}
+
+function rotatePhoto(index) {
+    uploadedPhotos[index].rotation += 90;
+    if (uploadedPhotos[index].rotation >= 360) {
+        uploadedPhotos[index].rotation = 0;
+    }
+    displayPhotos();
+}
+
+function deletePhoto(index) {
+    uploadedPhotos.splice(index, 1);
+    displayPhotos();
+}
+
+let needleAngle = 0;
+const needle = document.getElementById('fuelNeedle');
+const aforadorImg = document.getElementById('aforadorImg');
+
+if (aforadorImg && needle) {
+    function initFuelNeedle() {
+        function handleMove(clientX, clientY) {
+            const img = document.getElementById('aforadorImg');
+            const rect = img.getBoundingClientRect();
+            const centerX = rect.left + (rect.width * 0.47);
+            const centerY = rect.top + (rect.height * 0.30);
+            const deltaX = clientX - centerX;
+            const deltaY = clientY - centerY;
+            let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+            angle = Math.max(-90, Math.min(90, angle));
+            needleAngle = angle;
+            needle.style.transform = `rotate(${angle}deg)`;
+        }
+
+        needle.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            function onMouseMove(e) { handleMove(e.clientX, e.clientY); }
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', onMouseMove);
+            }, { once: true });
+        });
+
+        needle.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            function onTouchMove(e) {
+                const touch = e.touches[0];
+                handleMove(touch.clientX, touch.clientY);
+            }
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', () => {
+                document.removeEventListener('touchmove', onTouchMove);
+            }, { once: true });
+        }, { passive: false });
+    }
+
+    if (aforadorImg.complete) {
+        initFuelNeedle();
+    } else {
+        aforadorImg.addEventListener('load', initFuelNeedle);
+    }
+}
+
+function generatePDF() {
+    // Mostrar spinner
+    const overlay = document.createElement('div');
+    overlay.className = 'pdf-overlay';
+    overlay.id = 'pdfOverlay';
+    overlay.innerHTML = '<div class="spinner-border text-primary" role="status"></div><span>Generando PDF...</span>';
+    document.body.appendChild(overlay);
+    setTimeout(() => {
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    const realizadaPor = document.getElementById('realizadaPor').value;
+    const rut = document.getElementById('rut').value;
+    const cargo = document.getElementById('cargo').value;
+    const fecha = document.getElementById('fecha').value;
+    const marca = document.getElementById('marca').value;
+    const modelo = document.getElementById('modelo').value;
+    const patente = document.getElementById('patente').value;
+    const ano = document.getElementById('ano').value;
+    const kilometraje = document.getElementById('kilometraje').value;
+    const clase = document.getElementById('clase').value;
+
+    const margin = 10;
+    const contentWidth = 190;
+    let yPos = margin;
+
+    const headerHeight = 4.5;
+    const col1Width = 50;
+    const col2Width = contentWidth - col1Width - 50;
+    const col3Width = 50;
+    
+    const logo = new Image();
+    logo.src = '../../assets/images/logo montajes.jpg';
+    const logoWidth = 40;
+    const logoHeight = 12;
+    const logoX = margin + (col1Width - logoWidth) / 2;
+    doc.addImage(logo, 'JPEG', logoX, yPos + 4, logoWidth, logoHeight);
+    
+    doc.rect(margin, yPos, col1Width, headerHeight * 4);
+    doc.rect(margin + col1Width, yPos, col2Width, headerHeight * 4);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CHECK LIST CAMIÓN', margin + col1Width + col2Width/2, yPos + 7, { align: 'center' });
+    doc.text('PLUMA', margin + col1Width + col2Width/2, yPos + 12, { align: 'center' });
+    
+    doc.rect(margin + col1Width + col2Width, yPos, col3Width, headerHeight);
+    doc.setFontSize(8);
+    doc.text('Registro: CHECK-MOVIL-0010', margin + col1Width + col2Width + 2, yPos + 3.5);
+    yPos += headerHeight;
+    
+    doc.rect(margin + col1Width + col2Width, yPos, col3Width, headerHeight);
+    doc.text('Versión: 01', margin + col1Width + col2Width + 2, yPos + 3.5);
+    yPos += headerHeight;
+    
+    const firmaStartY = yPos;
+    yPos += headerHeight * 2;
+
+    const dataHeight = 6;
+    const firmaX = margin + col1Width + col2Width;
+    const totalWidth = firmaX - margin;
+    const colVeh = totalWidth / 4;
+    const col1 = colVeh * 2;
+    const col2 = colVeh * 2;
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    
+    // Fila 1: Realizada por | RUT
+    doc.rect(margin, yPos, col1, dataHeight);
+    doc.text('Realizada por: ' + realizadaPor, margin + 2, yPos + 4);
+    doc.rect(margin + col1, yPos, col2, dataHeight);
+    doc.text('RUT: ' + rut, margin + col1 + 2, yPos + 4);
+    yPos += dataHeight;
+    
+    // Fila 2: Cargo | Fecha
+    doc.rect(margin, yPos, col1, dataHeight);
+    doc.text('Cargo: ' + cargo, margin + 2, yPos + 4);
+    doc.rect(margin + col1, yPos, col2, dataHeight);
+    doc.text('Fecha: ' + fecha, margin + col1 + 2, yPos + 4);
+    yPos += dataHeight;
+    
+    // Fila 3: Marca | Modelo | Patente | Año
+    doc.rect(margin, yPos, colVeh, dataHeight);
+    doc.text('Marca: ' + marca, margin + 2, yPos + 4);
+    doc.rect(margin + colVeh, yPos, colVeh, dataHeight);
+    doc.text('Modelo: ' + modelo, margin + colVeh + 2, yPos + 4);
+    doc.rect(margin + colVeh * 2, yPos, colVeh, dataHeight);
+    doc.text('Patente: ' + patente, margin + colVeh * 2 + 2, yPos + 4);
+    doc.rect(margin + colVeh * 3, yPos, colVeh, dataHeight);
+    doc.text('Año: ' + ano, margin + colVeh * 3 + 2, yPos + 4);
+    yPos += dataHeight;
+    
+    // Fila 4: Kilometraje | Clase
+    const halfWidth = (col1 + col2) / 2;
+    doc.rect(margin, yPos, halfWidth, dataHeight);
+    doc.text('Kilometraje: ' + kilometraje, margin + 2, yPos + 4);
+    doc.rect(margin + halfWidth, yPos, halfWidth, dataHeight);
+    doc.text('Clase: ' + clase, margin + halfWidth + 2, yPos + 4);
+    yPos += dataHeight;
+    
+    // Firma extendida
+    const firmaHeight = headerHeight * 2 + dataHeight * 4;
+    doc.rect(margin + col1Width + col2Width, firmaStartY, col3Width, firmaHeight);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.text('Firma:', margin + col1Width + col2Width + 2, firmaStartY + 3.5);
+    
+    const sigX = margin + col1Width + col2Width + 2;
+    const sigY = firmaStartY + 3;
+    const sigW = col3Width - 4;
+    const sigH = firmaHeight - 4;
+    doc.addImage(canvas.toDataURL('image/png'), 'PNG', sigX, sigY, sigW, sigH);
+    
+    yPos += 3;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    const colW = [32, 6, 6, 6, 6, 6, 6, 26];
+    const leftX = 10;
+    const rightX = 108;
+    const rowH = 4;
+
+    let xPos = leftX;
+    ['REQUERIMIENTO', 'SI', 'NO', 'NA', 'B', 'M', 'NA', 'OBSERVACIONES'].forEach((h, i) => {
+        doc.rect(xPos, yPos, colW[i], 5);
+        doc.text(h, xPos + 1, yPos + 3.5);
+        xPos += colW[i];
+    });
+    xPos = rightX;
+    ['REQUERIMIENTO', 'SI', 'NO', 'NA', 'B', 'M', 'NA', 'OBSERVACIONES'].forEach((h, i) => {
+        doc.rect(xPos, yPos, colW[i], 5);
+        doc.text(h, xPos + 1, yPos + 3.5);
+        xPos += colW[i];
+    });
+
+    const tableStartY = yPos + 5;
+    const tableEndY = 220;
+    
+    yPos = tableStartY;
+    let itemNumber = 1;
+    let allItems = [];
+    checklistItems.forEach(section => {
+        allItems.push({ type: 'section', name: section.section });
+        section.items.forEach(item => allItems.push({ type: 'item', name: item }));
+    });
+
+    const midPoint = Math.ceil(allItems.length / 2);
+    const leftItems = allItems.slice(0, midPoint);
+    const rightItems = allItems.slice(midPoint);
+
+    let leftY = yPos;
+    let rightY = yPos;
+    
+    // Contar items reales en la columna izquierda
+    let leftItemCount = 0;
+    leftItems.forEach(item => {
+        if (item.type === 'item') leftItemCount++;
+    });
+    
+    let leftItemNum = 1;
+    let rightItemNum = leftItemCount + 1;
+
+    leftItems.forEach(item => {
+        if (item.type === 'section') {
+            doc.setFillColor(240, 240, 240);
+            doc.rect(leftX, leftY, 94, rowH, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.5);
+            doc.text(item.name, leftX + 47, leftY + 3, { align: 'center' });
+            leftY += rowH;
+        } else {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7);
+            xPos = leftX;
+            
+            doc.rect(xPos, leftY, colW[0], rowH);
+            doc.text(item.name, xPos + 1, leftY + 3);
+            xPos += colW[0];
+            
+            const si = document.getElementById(`si_${leftItemNum}`)?.checked ? 'X' : '';
+            const no = document.getElementById(`no_${leftItemNum}`)?.checked ? 'X' : '';
+            const na1 = document.getElementById(`na1_${leftItemNum}`)?.checked ? 'X' : '';
+            const b = document.getElementById(`b_${leftItemNum}`)?.checked ? 'X' : '';
+            const m = document.getElementById(`m_${leftItemNum}`)?.checked ? 'X' : '';
+            const na2 = document.getElementById(`na2_${leftItemNum}`)?.checked ? 'X' : '';
+            const obs = document.getElementById(`obs_${leftItemNum}`)?.value || '';
+            
+            doc.rect(xPos, leftY, colW[1], rowH);
+            doc.text(si, xPos + 2, leftY + 3);
+            xPos += colW[1];
+            doc.rect(xPos, leftY, colW[2], rowH);
+            doc.text(no, xPos + 2, leftY + 3);
+            xPos += colW[2];
+            doc.rect(xPos, leftY, colW[3], rowH);
+            doc.text(na1, xPos + 2, leftY + 3);
+            xPos += colW[3];
+            doc.rect(xPos, leftY, colW[4], rowH);
+            doc.text(b, xPos + 2, leftY + 3);
+            xPos += colW[4];
+            doc.rect(xPos, leftY, colW[5], rowH);
+            doc.text(m, xPos + 2, leftY + 3);
+            xPos += colW[5];
+            doc.rect(xPos, leftY, colW[6], rowH);
+            doc.text(na2, xPos + 2, leftY + 3);
+            xPos += colW[6];
+            doc.rect(xPos, leftY, colW[7], rowH);
+            if (obs) {
+                doc.text(obs.substring(0, 20), xPos + 1, leftY + 3);
+            }
+            
+            leftY += rowH;
+            leftItemNum++;
+        }
+    });
+
+    rightItems.forEach(item => {
+        if (item.type === 'section') {
+            doc.setFillColor(240, 240, 240);
+            doc.rect(rightX, rightY, 94, rowH, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.5);
+            doc.text(item.name, rightX + 47, rightY + 3, { align: 'center' });
+            rightY += rowH;
+        } else {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7);
+            xPos = rightX;
+            
+            doc.rect(xPos, rightY, colW[0], rowH);
+            doc.text(item.name, xPos + 1, rightY + 3);
+            xPos += colW[0];
+            
+            const si = document.getElementById(`si_${rightItemNum}`)?.checked ? 'X' : '';
+            const no = document.getElementById(`no_${rightItemNum}`)?.checked ? 'X' : '';
+            const na1 = document.getElementById(`na1_${rightItemNum}`)?.checked ? 'X' : '';
+            const b = document.getElementById(`b_${rightItemNum}`)?.checked ? 'X' : '';
+            const m = document.getElementById(`m_${rightItemNum}`)?.checked ? 'X' : '';
+            const na2 = document.getElementById(`na2_${rightItemNum}`)?.checked ? 'X' : '';
+            const obs = document.getElementById(`obs_${rightItemNum}`)?.value || '';
+            
+            doc.rect(xPos, rightY, colW[1], rowH);
+            doc.text(si, xPos + 2, rightY + 3);
+            xPos += colW[1];
+            doc.rect(xPos, rightY, colW[2], rowH);
+            doc.text(no, xPos + 2, rightY + 3);
+            xPos += colW[2];
+            doc.rect(xPos, rightY, colW[3], rowH);
+            doc.text(na1, xPos + 2, rightY + 3);
+            xPos += colW[3];
+            doc.rect(xPos, rightY, colW[4], rowH);
+            doc.text(b, xPos + 2, rightY + 3);
+            xPos += colW[4];
+            doc.rect(xPos, rightY, colW[5], rowH);
+            doc.text(m, xPos + 2, rightY + 3);
+            xPos += colW[5];
+            doc.rect(xPos, rightY, colW[6], rowH);
+            doc.text(na2, xPos + 2, rightY + 3);
+            xPos += colW[6];
+            doc.rect(xPos, rightY, colW[7], rowH);
+            if (obs) {
+                doc.text(obs.substring(0, 20), xPos + 1, rightY + 3);
+            }
+            
+            rightY += rowH;
+            rightItemNum++;
+        }
+    });
+
+    // Agregar fila vacía al final de la columna derecha solo en PDF
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    xPos = rightX;
+    doc.rect(xPos, rightY, colW[0], rowH);
+    xPos += colW[0];
+    doc.rect(xPos, rightY, colW[1], rowH);
+    xPos += colW[1];
+    doc.rect(xPos, rightY, colW[2], rowH);
+    xPos += colW[2];
+    doc.rect(xPos, rightY, colW[3], rowH);
+    xPos += colW[3];
+    doc.rect(xPos, rightY, colW[4], rowH);
+    xPos += colW[4];
+    doc.rect(xPos, rightY, colW[5], rowH);
+    xPos += colW[5];
+    doc.rect(xPos, rightY, colW[6], rowH);
+    xPos += colW[6];
+    doc.rect(xPos, rightY, colW[7], rowH);
+
+    yPos = tableEndY + 10;
+
+    const observaciones = document.getElementById('observacionesGenerales').value;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('Observaciones:', 10, yPos);
+    yPos += 5;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    
+    const obsHeight = 25;
+    const obsWidth = 94;
+    const lineSpacing = 5;
+    const numLines = 5;
+    
+    doc.rect(10, yPos, obsWidth, obsHeight);
+    
+    // Dibujar líneas horizontales
+    for (let i = 1; i < numLines; i++) {
+        const lineY = yPos + (i * lineSpacing);
+        doc.line(10, lineY, 10 + obsWidth, lineY);
+    }
+    
+    if (observaciones) {
+        const lines = doc.splitTextToSize(observaciones, 90);
+        let textY = yPos + 3.5;
+        lines.forEach(line => {
+            doc.text(line, 12, textY);
+            textY += 5;
+        });
+    }
+
+    const fuelX = 110;
+    const fuelY = tableEndY + 10;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('Nivel de combustible:', fuelX, fuelY);
+    
+    const aforador = new Image();
+    aforador.src = '../../assets/images/aforador2.png';
+    doc.addImage(aforador, 'PNG', fuelX, fuelY + 5, 25, 18);
+    
+    const centerX = fuelX + 12.5;
+    const centerY = fuelY + 5 + 14;
+    const needleLength = 9;
+    
+    const adjustedAngle = needleAngle - 90;
+    const radians = (adjustedAngle * Math.PI) / 180;
+    const endX = centerX + needleLength * Math.cos(radians);
+    const endY = centerY + needleLength * Math.sin(radians);
+    
+    doc.setDrawColor(255, 0, 0);
+    doc.setLineWidth(0.5);
+    doc.line(centerX, centerY, endX, endY);
+    doc.setDrawColor(0, 0, 0);
+
+    // Tabla CONTROL JOYSTICK al lado del aforador (más pequeña)
+    const joystickX = fuelX + 40;
+    let joystickY = fuelY;
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('Control Joystick:', joystickX, joystickY);
+    joystickY += 5;
+    
+    const colW1 = 30;
+    const colW2 = 7;
+    
+    doc.setFillColor(240, 240, 240);
+    doc.rect(joystickX, joystickY, colW1, rowH, 'F');
+    doc.setFontSize(7);
+    doc.text('CONTROL JOYSTICK', joystickX + colW1/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text('B', joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text('M', joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    
+    const joystickN = document.getElementById('joystick_n')?.value || '';
+    const joystickNB = document.getElementById('joystick_n_b')?.checked ? 'X' : '';
+    const joystickNM = document.getElementById('joystick_n_m')?.checked ? 'X' : '';
+    const bateria1B = document.getElementById('bateria1_b')?.checked ? 'X' : '';
+    const bateria1M = document.getElementById('bateria1_m')?.checked ? 'X' : '';
+    const bateria2B = document.getElementById('bateria2_b')?.checked ? 'X' : '';
+    const bateria2M = document.getElementById('bateria2_m')?.checked ? 'X' : '';
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('N° : ' + joystickN, joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(joystickNB, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(joystickNM, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('ESTADO BATERIA 1', joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(bateria1B, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(bateria1M, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+    joystickY += rowH;
+    
+    doc.rect(joystickX, joystickY, colW1, rowH);
+    doc.text('ESTADO BATERIA 2', joystickX + 2, joystickY + 3);
+    doc.rect(joystickX + colW1, joystickY, colW2, rowH);
+    doc.text(bateria2B, joystickX + colW1 + colW2/2, joystickY + 3, { align: 'center' });
+    doc.rect(joystickX + colW1 + colW2, joystickY, colW2, rowH);
+    doc.text(bateria2M, joystickX + colW1 + colW2 + colW2/2, joystickY + 3, { align: 'center' });
+
+    // Agregar imagen de pluma con dibujos (solo si el usuario lo marca)
+    const incluirDibujos = document.getElementById('incluirDibujos')?.checked;
+    
+    if (plumaCanvas && plumaCtx && incluirDibujos) {
+        doc.addPage();
+        
+        // Logo en la nueva página
+        const logoPage = new Image();
+        logoPage.src = '../../assets/images/logo montajes.jpg';
+        doc.addImage(logoPage, 'JPEG', 10, 10, 40, 12);
+        
+        let yPos2 = 30;
+        
+        // Sección DETALLES - IMPACTO CARROCERIA
+        doc.setFillColor(240, 240, 240);
+        doc.rect(10, yPos2, 190, rowH, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('DETALLES - IMPACTO CARROCERIA', 105, yPos2 + 3, { align: 'center' });
+        yPos2 += rowH;
+        
+        const impactoWidth = 190 / 3;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        
+        const abolladura = document.getElementById('abolladura')?.checked ? 'X' : '';
+        const rayadura = document.getElementById('rayadura')?.checked ? 'X' : '';
+        const piezaRota = document.getElementById('piezaRota')?.checked ? 'X' : '';
+        
+        doc.rect(10, yPos2, impactoWidth, rowH);
+        doc.text(abolladura ? '[X] ABOLLADURA' : '[ ] ABOLLADURA', 10 + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        doc.rect(10 + impactoWidth, yPos2, impactoWidth, rowH);
+        doc.text(rayadura ? '[X] RAYADURA' : '[ ] RAYADURA', 10 + impactoWidth + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        doc.rect(10 + impactoWidth * 2, yPos2, impactoWidth, rowH);
+        doc.text(piezaRota ? '[X] PIEZA ROTA' : '[ ] PIEZA ROTA', 10 + impactoWidth * 2 + impactoWidth/2, yPos2 + 3, { align: 'center' });
+        yPos2 += rowH + 10;
+        
+        // Preparar imagen del pluma con dibujos
+        const img = document.getElementById('plumaImg');
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Usar el tamaño real del canvas (con DPR)
+        tempCanvas.width = plumaCanvas.width;
+        tempCanvas.height = plumaCanvas.height;
+        
+        // Fondo blanco para evitar transparencias
+        tempCtx.fillStyle = '#FFFFFF';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // Escalar el contexto para que coincida con el DPR
+        const dpr = window.devicePixelRatio || 1;
+        tempCtx.scale(dpr, dpr);
+        
+        // Dibujar la imagen de fondo
+        const rect = plumaCanvas.getBoundingClientRect();
+        tempCtx.drawImage(img, 0, 0, rect.width, rect.height);
+        
+        // Dibujar el canvas de dibujos encima (sin escalar porque ya tiene DPR)
+        tempCtx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+        tempCtx.drawImage(plumaCanvas, 0, 0);
+        
+        const imgData = tempCanvas.toDataURL('image/jpeg', 0.95);
+        const imgWidth = 120;
+        const imgHeight = (tempCanvas.height / tempCanvas.width) * imgWidth;
+        
+        const xCentered = (210 - imgWidth) / 2; // A4 width is 210mm
+        doc.addImage(imgData, 'JPEG', xCentered, yPos2, imgWidth, imgHeight);
+    }
+    
+    // Agregar fotos
+    if (uploadedPhotos.length > 0) {
+        let photoIndex = 0;
+        
+        while (photoIndex < uploadedPhotos.length) {
+            doc.addPage();
+            
+            // Logo en cada página de fotos
+            const logoPhoto = new Image();
+            logoPhoto.src = '../../assets/images/logo montajes.jpg';
+            doc.addImage(logoPhoto, 'JPEG', 10, 10, 40, 12);
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('Evidencia:', 10, 30);
+            
+            let yPhoto = 40;
+            const photosPerRow = 2;
+            const photoWidth = 90;
+            const photoHeight = 67.5;
+            const spacing = 10;
+            
+            for (let row = 0; row < 2 && photoIndex < uploadedPhotos.length; row++) {
+                for (let col = 0; col < photosPerRow && photoIndex < uploadedPhotos.length; col++) {
+                    const photo = uploadedPhotos[photoIndex];
+                    const xPhoto = 10 + col * (photoWidth + spacing);
+                    const yPhotoPos = yPhoto + row * (photoHeight + spacing);
+                    
+                    // Crear canvas temporal para rotar la foto
+                    const tempPhotoCanvas = document.createElement('canvas');
+                    const tempPhotoCtx = tempPhotoCanvas.getContext('2d');
+                    const photoImg = new Image();
+                    photoImg.src = photo.src;
+                    
+                    if (photo.rotation === 90 || photo.rotation === 270) {
+                        tempPhotoCanvas.width = photoImg.height;
+                        tempPhotoCanvas.height = photoImg.width;
+                    } else {
+                        tempPhotoCanvas.width = photoImg.width;
+                        tempPhotoCanvas.height = photoImg.height;
+                    }
+                    
+                    tempPhotoCtx.translate(tempPhotoCanvas.width / 2, tempPhotoCanvas.height / 2);
+                    tempPhotoCtx.rotate((photo.rotation * Math.PI) / 180);
+                    tempPhotoCtx.drawImage(photoImg, -photoImg.width / 2, -photoImg.height / 2);
+                    
+                    doc.addImage(tempPhotoCanvas.toDataURL('image/jpeg', 0.8), 'JPEG', xPhoto, yPhotoPos, photoWidth, photoHeight);
+                    photoIndex++;
+                }
+            }
+        }
+    }
+
+    // Abrir vista previa en nueva pestaña
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    // Quitar spinner
+    document.getElementById('pdfOverlay')?.remove();
+    window.open(pdfUrl, '_blank');
+    }, 100);
+}

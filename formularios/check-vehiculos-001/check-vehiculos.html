@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light only">
+    <title>CHECK LIST FURGON CARROZADOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/formularios.css" rel="stylesheet">
+    <style>
+        :root { color-scheme: light only; }
+        body { background-color: #ffffff !important; color: #000000 !important; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .header-table td { border: 1px solid #000; padding: 8px; }
+        .checklist-table { width: 100%; font-size: 0.85rem; }
+        @media (max-width: 768px) {
+            input[type="text"], input[type="date"], input[type="number"] { font-size: 16px; }
+            input[type="date"] { 
+                max-width: 100%; 
+                padding: 2px; 
+                background-color: transparent;
+            }
+            .checklist-table { font-size: 0.7rem; }
+            .checklist-table th, .checklist-table td { padding: 4px 2px; }
+            .header-table { font-size: 0.8rem; }
+            .header-table td { padding: 4px; }
+            .header-table img { max-width: 80px !important; }
+            .header-table h4 { font-size: 0.9rem; }
+        }
+        input[type="text"], input[type="date"], input[type="number"], textarea { border: none; outline: none; padding: 4px; width: 100%; }
+        #signatureCanvas { border: 1px solid #dee2e6; border-radius: 0.375rem; max-width: 100%; display: block; margin: 5px auto 0 auto; }
+        .furgon-container { position: relative; display: inline-block; border: 1px solid #ccc; width: 100%; max-width: 600px; margin: 0 auto; display: block; }
+        .furgon-container img { width: 100%; height: auto; display: block; }
+        .firma-header-col { display: none; } /* Ocultar firma en header HTML */
+        @media (max-width: 768px) {
+            #signatureCanvas { height: 300px !important; }
+            .furgon-container { max-width: 100%; }
+        }
+        @media print { 
+            .no-print { display: none; }
+            .firma-header-col { display: table-cell !important; } /* Mostrar firma en PDF */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="form-container">
+            <div class="mb-2 no-print"><a href="../../index.html" class="btn btn-light border" style="width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg></a></div>
+            <table class="header-table">
+                <tr>
+                    <td rowspan="3" style="width: 200px; text-align: center; vertical-align: middle;">
+                        <img src="../../assets/images/logo montajes.jpg" alt="Logo Montajes" style="max-width: 180px;">
+                    </td>
+                    <td rowspan="3" style="text-align: center; width: 40%;">
+                        <h4 style="margin: 0;">CHECK LIST FURGON</h4>
+                        <h4 style="margin: 0;">CARROZADOS</h4>
+                    </td>
+                    <td style="width: 25%;">Registro: CHECK-MOVIL-0001</td>
+                </tr>
+                <tr><td>Version 01</td></tr>
+            </table>
+
+            <table class="header-table">
+                <tr>
+                    <td style="width: 15%;"><strong>Fecha:</strong></td>
+                    <td style="width: 20%;"><input type="date" id="fecha"></td>
+                    <td style="width: 10%;"><strong>Marca:</strong></td>
+                    <td style="width: 55%;"><input type="text" id="marca"></td>
+                    <td class="firma-header-col" style="width: 10%;"><strong>Firma:</strong></td>
+                    <td class="firma-header-col" style="width: 30%;"></td>
+                </tr>
+                <tr>
+                    <td><strong>Chofer:</strong></td>
+                    <td><input type="text" id="chofer"></td>
+                    <td><strong>Patente:</strong></td>
+                    <td colspan="3"><input type="text" id="patente"></td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="row">
+                            <div class="col"><strong>Rut:</strong> <input type="text" id="rut" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Modelo:</strong> <input type="text" id="modelo" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Kilometraje:</strong> <input type="number" id="kilometraje" class="form-control form-control-sm"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="table-responsive">
+                <table class="table table-bordered checklist-table">
+                    <thead style="display: none;">
+                        <tr>
+                            <th>REQUERIMIENTO</th>
+                            <th>SI</th>
+                            <th>NO</th>
+                            <th>NA</th>
+                            <th>B</th>
+                            <th>M</th>
+                            <th>NA</th>
+                            <th>OBSERVACIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checklistBody">
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">DOCUMENTOS</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Permiso de Circulación</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_1"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_1"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_1"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_1"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_1"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_1"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_1"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Seguro Obligatorio</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_2"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_2"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_2"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_2"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_2"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_2"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_2"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Certificado Antivuelco ext.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_3"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_3"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_3"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_3"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_3"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_3"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_3"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Certificado Antivuelco int.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_4"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_4"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_4"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_4"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_4"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_4"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_4"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Patente del vehículo del.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_5"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_5"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_5"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_5"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_5"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_5"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_5"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Patente del vehículo tras.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_6"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_6"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_6"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_6"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_6"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_6"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_6"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Revisión Tecnica</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_7"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_7"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_7"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_7"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_7"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_7"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_7"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Ultima Mantención</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_8"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_8"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_8"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_8"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_8"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_8"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_8"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">LUCES</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Interior Cabina</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_9"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_9"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_9"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_9"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_9"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_9"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_9"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Altas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_10"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_10"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_10"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_10"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_10"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_10"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_10"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Bajas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_11"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_11"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_11"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_11"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_11"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_11"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_11"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Neblineros</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_12"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_12"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_12"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_12"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_12"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_12"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_12"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Retroceso</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_13"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_13"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_13"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_13"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_13"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_13"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_13"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Viraje Izquierdo</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_14"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_14"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_14"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_14"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_14"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_14"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_14"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Viraje Derecho</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_15"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_15"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_15"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_15"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_15"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_15"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_15"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Emergencia</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_16"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_16"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_16"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_16"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_16"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_16"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_16"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Freno</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_17"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_17"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_17"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_17"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_17"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_17"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_17"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Tercera Luz de Freno</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_18"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_18"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_18"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_18"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_18"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_18"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_18"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Estacionamiento</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_19"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_19"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_19"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_19"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_19"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_19"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_19"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">NEUMATICOS</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Delantero Izquierdo</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_20"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_20"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_20"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_20"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_20"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_20"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_20"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Delantero Derecho</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_21"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_21"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_21"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_21"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_21"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_21"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_21"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Trasero Izquierdo</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_22"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_22"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_22"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_22"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_22"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_22"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_22"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Trasero Derecho</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_23"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_23"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_23"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_23"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_23"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_23"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_23"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Repuesto</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_24"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_24"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_24"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_24"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_24"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_24"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_24"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">NIVELES</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Agua radiador</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_25"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_25"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_25"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_25"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_25"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_25"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_25"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Aceite</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_26"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_26"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_26"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_26"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_26"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_26"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_26"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Liquido de frenos</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_27"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_27"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_27"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_27"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_27"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_27"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_27"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Agua limpiaparabrisas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_28"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_28"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_28"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_28"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_28"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_28"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_28"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Aire acondicionado</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_29"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_29"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_29"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_29"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_29"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_29"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_29"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_30"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_30"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_30"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_30"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_30"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_30"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_30"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_31"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_31"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_31"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_31"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_31"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_31"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_31"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">INTERIOR CABINA</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Alza Vidrios</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_32"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_32"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_32"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_32"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_32"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_32"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_32"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Cierre Centralizado</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_33"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_33"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_33"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_33"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_33"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_33"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_33"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Radio Comercial</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_34"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_34"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_34"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_34"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_34"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_34"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_34"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Relojes Indicadores</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_35"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_35"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_35"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_35"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_35"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_35"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_35"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Plumillas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_36"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_36"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_36"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_36"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_36"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_36"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_36"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Aire Acondicionado</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_37"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_37"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_37"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_37"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_37"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_37"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_37"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Calefacción</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_38"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_38"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_38"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_38"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_38"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_38"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_38"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Bocina</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_39"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_39"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_39"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_39"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_39"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_39"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_39"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Parabrisas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_40"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_40"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_40"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_40"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_40"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_40"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_40"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Luneta trasera</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_41"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_41"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_41"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_41"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_41"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_41"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_41"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Vidrio lat. delantero izq.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_42"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_42"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_42"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_42"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_42"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_42"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_42"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Vidrio lat. delantero der.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_43"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_43"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_43"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_43"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_43"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_43"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_43"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Vidrio lat. trasero izq.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_44"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_44"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_44"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_44"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_44"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_44"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_44"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Vidrio lat. trasero der.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_45"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_45"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_45"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_45"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_45"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_45"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_45"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Espejo lateral izq.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_46"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_46"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_46"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_46"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_46"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_46"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_46"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Espejo lateral der.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_47"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_47"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_47"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_47"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_47"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_47"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_47"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Espejo retrovisor</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_48"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_48"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_48"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_48"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_48"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_48"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_48"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">REQUERIMIENTO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">B</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">M</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NA</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIONES</th>
+                        </tr>
+                        <tr><td colspan="8" style="background-color: white; font-weight: bold; text-align: center;">ACCESORIOS SEGURIDAD</td></tr>
+                        <tr>
+                            <td style="width: 35%;">Alarma de Retroceso</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_49"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_49"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_49"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_49"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_49"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_49"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_49"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Freno de Mano</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_50"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_50"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_50"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_50"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_50"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_50"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_50"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Botiquín</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_51"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_51"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_51"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_51"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_51"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_51"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_51"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Chaleco Reflectante (1)</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_52"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_52"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_52"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_52"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_52"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_52"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_52"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Cuñas (2)</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_53"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_53"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_53"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_53"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_53"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_53"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_53"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Extintor PQS</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_54"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_54"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_54"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_54"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_54"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_54"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_54"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Triangulos</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_55"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_55"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_55"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_55"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_55"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_55"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_55"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Cinturón Seguridad chofer</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_56"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_56"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_56"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_56"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_56"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_56"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_56"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Cinturón Seguridad acomp.</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_57"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_57"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_57"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_57"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_57"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_57"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_57"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Cinturón Seguridad trasero</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_58"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_58"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_58"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_58"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_58"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_58"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_58"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Barra antivuelco interior</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_59"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_59"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_59"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_59"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_59"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_59"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_59"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Barra antivuelco exterior</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_60"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_60"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_60"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_60"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_60"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_60"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_60"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Gata</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_61"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_61"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_61"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_61"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_61"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_61"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_61"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Llave de reparación ruedas</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_62"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_62"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_62"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_62"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_62"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_62"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_62"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Varillas para reparación</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_63"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_63"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_63"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_63"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_63"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_63"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_63"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%;">Kit de enganche (arrastre)</td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="si_64"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="no_64"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na1_64"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="b_64"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="m_64"></td>
+                            <td style="width: 7%;"><input type="checkbox" class="form-check-input" id="na2_64"></td>
+                            <td style="width: 23%;"><input type="text" class="form-control form-control-sm" id="obs_64"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8" style="background-color: #e9ecef; font-weight: bold; text-align: center;">DETALLES - IMPACTO CARROCERIA</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <input type="checkbox" class="form-check-input" id="abolladura">
+                                <label for="abolladura" class="ms-1">ABOLLADURA</label>
+                            </td>
+                            <td colspan="3" style="text-align: center;">
+                                <input type="checkbox" class="form-check-input" id="rayadura">
+                                <label for="rayadura" class="ms-1">RAYADURA</label>
+                            </td>
+                            <td colspan="3" style="text-align: center;">
+                                <input type="checkbox" class="form-check-input" id="piezaRota">
+                                <label for="piezaRota" class="ms-1">PIEZA ROTA</label>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label><strong>Observaciones:</strong></label>
+                    <textarea id="observacionesGenerales" rows="4" class="form-control" style="background-image: linear-gradient(transparent, transparent calc(1.5em - 1px), #dee2e6 calc(1.5em - 1px), #dee2e6 1.5em); background-size: 100% 1.5em; line-height: 1.5em; padding-top: 0.25em;"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label><strong>Marcar daños en el vehículo (dibuja sobre las imágenes):</strong></label>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12 mb-3">
+                    <h6>Vistas del Vehículo</h6>
+                    <div class="furgon-container">
+                        <img id="furgonImg" src="../../assets/images/furgon carrozado.png" style="width: 100%; height: auto; display: block;">
+                        <canvas id="furgonCanvas" style="position: absolute; top: 0; left: 0; cursor: crosshair; width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12">
+                    <button type="button" id="clearFurgon" class="btn btn-secondary no-print">Limpiar Todos los Dibujos</button>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="incluirDibujos" checked>
+                        <label class="form-check-label" for="incluirDibujos">
+                            Incluir dibujos del vehículo en el PDF
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label><strong>Agregar fotos (máximo 4 por página):</strong></label>
+                    <div class="d-flex gap-2 mb-3 flex-wrap">
+                        <button type="button" class="btn btn-success" onclick="document.getElementById('photoCaptureInput').click()">
+                            Tomar Foto
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('photoGalleryInput').click()">
+                            Galería
+                        </button>
+                    </div>
+                    <input type="file" id="photoCaptureInput" accept="image/*" capture="environment" class="d-none">
+                    <input type="file" id="photoGalleryInput" accept="image/*" multiple class="d-none">
+                    <div id="photoPreview" class="row"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="border rounded p-3" style="height: 100%;">
+                        <label><strong>Nivel de combustible:</strong></label>
+                        <p class="text-muted small mb-2">Arrastra la línea roja</p>
+                        <div class="text-center">
+                            <div style="position: relative; display: inline-block;">
+                                <img id="aforadorImg" src="../../assets/images/aforador2.png" style="width: 150px; height: auto; display: block;">
+                                <div id="fuelNeedle" style="position: absolute; width: 3px; height: 50px; background: red; transform-origin: bottom center; left: 49%; top: 30%; cursor: grab; border-radius: 2px; z-index: 10;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="border rounded p-2" style="position: relative; height: 100%;">
+                        <label><strong>Firma:</strong></label>
+                        <canvas id="signatureCanvas" style="width: 100%; height: 180px; max-width: 100%;"></canvas>
+                        <div class="text-end mt-2">
+                            <button type="button" class="btn btn-sm btn-secondary no-print" onclick="clearSignature()">Limpiar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group no-print">
+                <button type="button" class="btn btn-primary" onclick="generatePDF()">Generar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="check-vehiculos.js"></script>
+    <button class="btn-scroll-top no-print" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/></svg>
+    </button>
+    <script>
+    window.addEventListener('scroll', function() {
+        document.getElementById('scrollTopBtn').classList.toggle('visible', window.scrollY > 300);
+    });
+    </script>
+</body>
+</html>

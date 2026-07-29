@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light only">
+    <title>CHECK LIST CARRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/formularios.css" rel="stylesheet">
+    <style>
+        :root { color-scheme: light only; }
+        body { background-color: #ffffff !important; color: #000000 !important; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .header-table td { border: 1px solid #000; padding: 8px; }
+        .checklist-table { width: 100%; font-size: 0.85rem; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        @media (max-width: 768px) {
+            input[type="text"], input[type="date"], input[type="number"] { font-size: 16px; }
+            input[type="date"] { 
+                max-width: 100%; 
+                padding: 2px; 
+                background-color: transparent;
+            }
+            .checklist-table { font-size: 0.7rem; }
+            .checklist-table th, .checklist-table td { padding: 4px 2px; }
+            .checklist-table input[type="radio"] { transform: scale(0.9); }
+            .header-table { font-size: 0.8rem; }
+            .header-table td { padding: 4px; }
+            .header-table img { max-width: 80px !important; }
+            .header-table h4 { font-size: 0.9rem; }
+        }
+        input[type="text"], input[type="date"], input[type="number"], textarea { border: none; outline: none; padding: 4px; width: 100%; }
+        #signatureCanvas { border: 1px solid #dee2e6; border-radius: 0.375rem; max-width: 100%; display: block; margin: 5px auto 0 auto; }
+        .carro-container { position: relative; display: inline-block; border: 1px solid #ccc; width: 100%; max-width: 600px; margin: 0 auto; display: block; }
+        .firma-header-col { display: none; } /* Ocultar firma en header HTML */
+        @media (max-width: 768px) {
+            #signatureCanvas { height: 300px !important; }
+            .carro-container { max-width: 100%; }
+        }
+        @media print { 
+            .no-print { display: none; }
+            .firma-header-col { display: table-cell !important; } /* Mostrar firma en PDF */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="form-container">
+            <div class="mb-2 no-print"><a href="../../index.html" class="btn btn-light border" style="width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg></a></div>
+            <table class="header-table">
+                <tr>
+                    <td rowspan="3" style="width: 200px; text-align: center; vertical-align: middle;">
+                        <img src="../../assets/images/logo montajes.jpg" alt="Logo Montajes" style="max-width: 180px;">
+                    </td>
+                    <td rowspan="3" style="text-align: center; width: 40%;">
+                        <h4 style="margin: 0;">CHECK LIST CARRO</h4>
+                        <h4 style="margin: 0;">DE ARRASTRE</h4>
+                    </td>
+                    <td style="width: 25%;">Registro: CHECK-MOVIL-0003</td>
+                </tr>
+                <tr><td>Version 01</td></tr>
+            </table>
+
+            <table class="header-table">
+                <tr>
+                    <td style="width: 15%;"><strong>Realizada por:</strong></td>
+                    <td style="width: 20%;"><input type="text" id="realizadaPor"></td>
+                    <td style="width: 10%;"><strong>RUT:</strong></td>
+                    <td style="width: 55%;"><input type="text" id="rut"></td>
+                    <td class="firma-header-col" style="width: 10%;"><strong>Firma:</strong></td>
+                    <td class="firma-header-col" style="width: 30%;"></td>
+                </tr>
+                <tr>
+                    <td><strong>Cargo:</strong></td>
+                    <td><input type="text" id="cargo"></td>
+                    <td><strong>Fecha:</strong></td>
+                    <td colspan="3"><input type="date" id="fecha"></td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="row">
+                            <div class="col"><strong>Marca:</strong> <input type="text" id="marca" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Modelo:</strong> <input type="text" id="modelo" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Patente:</strong> <input type="text" id="patente" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Año:</strong> <input type="number" id="ano" class="form-control form-control-sm"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div class="row">
+                            <div class="col"><strong>Kilometraje:</strong> <input type="number" id="kilometraje" class="form-control form-control-sm"></div>
+                            <div class="col"><strong>Clase:</strong> <input type="text" id="clase" class="form-control form-control-sm"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="table-responsive">
+                <table class="table table-bordered checklist-table">
+                    <thead style="display: none;">
+                        <tr>
+                            <th>ELEMENTOS A INSPECCIONAR</th>
+                            <th>SI</th>
+                            <th>NO</th>
+                            <th>N.A</th>
+                            <th>OBSERVACIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checklistBody">
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">ELEMENTOS A INSPECCIONAR</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">N.A</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIÓN</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Foco trasero derecho</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item0" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item0" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item0" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs0"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Foco trasero izquierdo</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item1" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item1" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item1" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs1"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Luces de frenos</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item2" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item2" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item2" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs2"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Luces estacionamientos</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item3" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item3" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item3" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs3"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Luces marcha atrás</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item4" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item4" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item4" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs4"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Intermitente izquierdo</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item5" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item5" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item5" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs5"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Intermitente derecho</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item6" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item6" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item6" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs6"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Luz indicadora patente</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item7" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item7" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item7" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs7"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Tercera luz de freno</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item8" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item8" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item8" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs8"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Conector enchufe de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item9" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item9" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item9" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs9"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Rueda de repuesto</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item10" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item10" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item10" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs10"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Neumático derecho</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item11" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item11" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item11" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs11"></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">ELEMENTOS A INSPECCIONAR</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">SI</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">NO</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">N.A</th>
+                            <th style="background-color: #e9ecef; font-weight: bold; text-align: center;">OBSERVACIÓN</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Neumático izquierdo</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item12" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item12" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item12" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs12"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Mano conector de anclaje de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item13" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item13" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item13" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs13"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Seguro de conector anclaje de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item14" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item14" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item14" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs14"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Cadenas de seguridad de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item15" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item15" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item15" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs15"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Grilletes de seguridad de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item16" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item16" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item16" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs16"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Estado de eje de masa de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item17" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item17" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item17" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs17"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Estructura laterales de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item18" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item18" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item18" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs18"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Patente trasera</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item19" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item19" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item19" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs19"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Permiso de circulación</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item20" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item20" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item20" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs20"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Revisión técnica</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item21" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item21" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item21" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs21"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Seguro obligatorio</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item22" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item22" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item22" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs22"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">Padrón de carro</td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item23" value="si"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item23" value="no"></td>
+                            <td style="width: 8%; text-align: center;"><input type="radio" name="item23" value="na"></td>
+                            <td style="width: 26%;"><input type="text" class="form-control form-control-sm" id="obs23"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" style="background-color: #e9ecef; font-weight: bold; text-align: center;">DETALLES - IMPACTO CARROCERIA</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="padding: 0;">
+                                <div style="display: flex; width: 100%;">
+                                    <div style="flex: 1; text-align: center; padding: 8px; border-right: 1px solid #dee2e6;">
+                                        <input type="checkbox" class="form-check-input" id="abolladura">
+                                        <label for="abolladura" class="ms-1">ABOLLADURA</label>
+                                    </div>
+                                    <div style="flex: 1; text-align: center; padding: 8px; border-right: 1px solid #dee2e6;">
+                                        <input type="checkbox" class="form-check-input" id="rayadura">
+                                        <label for="rayadura" class="ms-1">RAYADURA</label>
+                                    </div>
+                                    <div style="flex: 1; text-align: center; padding: 8px;">
+                                        <input type="checkbox" class="form-check-input" id="piezaRota">
+                                        <label for="piezaRota" class="ms-1">PIEZA ROTA</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label><strong>Observaciones:</strong></label>
+                    <textarea id="observacionesGenerales" rows="4" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 mb-3">
+                    <h5>Dibujo del Vehículo (marcar abolladuras y daños)</h5>
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="carro-container">
+                        <img id="carroImg" src="../../assets/images/carro.png" style="width: 100%; height: auto; display: block;">
+                        <canvas id="carroCanvas" style="position: absolute; top: 0; left: 0; cursor: crosshair; width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12">
+                    <button type="button" id="clearCarro" class="btn btn-secondary no-print">Limpiar Dibujo</button>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="incluirDibujos" checked>
+                        <label class="form-check-label" for="incluirDibujos">
+                            Incluir dibujo del vehículo en el PDF
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label><strong>Agregar fotos (máximo 4 por página):</strong></label>
+                    <div class="d-flex gap-2 mb-3 flex-wrap">
+                        <button type="button" class="btn btn-success" onclick="document.getElementById('photoCaptureInput').click()">
+                            Tomar Foto
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('photoGalleryInput').click()">
+                            Galería
+                        </button>
+                    </div>
+                    <input type="file" id="photoCaptureInput" accept="image/*" capture="environment" class="d-none">
+                    <input type="file" id="photoGalleryInput" accept="image/*" multiple class="d-none">
+                    <div id="photoPreview" class="row"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="border rounded p-2" style="position: relative; height: 100%;">
+                        <label><strong>Firma:</strong></label>
+                        <canvas id="signatureCanvas" style="width: 100%; height: 180px; max-width: 100%;"></canvas>
+                        <div class="text-end mt-2">
+                            <button type="button" class="btn btn-sm btn-secondary no-print" onclick="clearSignature()">Limpiar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group no-print">
+                <button type="button" class="btn btn-primary" onclick="generatePDF()">Generar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="check-carro.js"></script>
+    <button class="btn-scroll-top no-print" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/></svg>
+    </button>
+    <script>
+    window.addEventListener('scroll', function() {
+        document.getElementById('scrollTopBtn').classList.toggle('visible', window.scrollY > 300);
+    });
+    </script>
+</body>
+</html>
