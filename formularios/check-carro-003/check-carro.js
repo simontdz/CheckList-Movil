@@ -1,3 +1,11 @@
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxMubR5VPola9CmE_hDLvVfup6YvAXbcjZozareZjL-ZAwkmoY7khyqtLWynlIvzYmE/exec";
+function enviarAGoogleSheets() {
+    const datos = { formulario: "CHECK-MOVIL-0003 Carro de Arrastre", fecha: document.getElementById('fecha')?.value || "", patente: document.getElementById('patente')?.value || "", conductor: document.getElementById('realizadaPor')?.value || "", rut: document.getElementById('rut')?.value || "", cargo: document.getElementById('cargo')?.value || "", marca: document.getElementById('marca')?.value || "", modelo: document.getElementById('modelo')?.value || "", kilometraje: document.getElementById('kilometraje')?.value || "", ano: document.getElementById('ano')?.value || "", clase: document.getElementById('clase')?.value || "", observaciones: document.getElementById('observacionesGenerales')?.value || "", items: {} };
+    const todosItems = []; checklistItems.forEach(section => { section.items.forEach(item => { todosItems.push(item || '(vacio)'); }); });
+    for (let i = 0; i < todosItems.length; i++) { const nombre = todosItems[i]; const radio = document.querySelector('input[name="item'+i+'"]:checked'); const obs = document.getElementById('obs'+i)?.value || ''; let estado = radio ? (radio.value === 'si' ? 'Sí' : radio.value === 'no' ? 'No' : 'N/A') : ''; datos.items[nombre] = { estado, condicion: '', obs }; }
+    fetch(GOOGLE_SHEETS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) }).catch(() => {});
+}
+
 const checklistItems = [
     { section: '', items: ['Foco trasero derecho', 'Foco trasero izquierdo', 'Luces de frenos', 'Luces estacionamientos', 'Luces marcha atrás', 'Intermitente izquierdo', 'Intermitente derecho', 'Luz indicadora patente', 'Tercera luz de freno', 'Conector enchufe de carro', 'Rueda de repuesto', 'Neumático derecho', 'Neumático izquierdo', 'Mano conector de anclaje de carro', 'Seguro de conector anclaje de carro', 'Cadenas de seguridad de carro', 'Grilletes de seguridad de carro', 'Estado de eje de masa de carro', 'Estructura laterales de carro', 'Patente trasera', 'Permiso de circulación', 'Revisión técnica', 'Seguro obligatorio', 'Padrón de carro']}
 ];
@@ -281,6 +289,7 @@ function deletePhoto(index) {
 
 
 function generatePDF() {
+    enviarAGoogleSheets();
     // Mostrar spinner
     const overlay = document.createElement('div');
     overlay.className = 'pdf-overlay';

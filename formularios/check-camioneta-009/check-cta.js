@@ -1,3 +1,52 @@
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxMubR5VPola9CmE_hDLvVfup6YvAXbcjZozareZjL-ZAwkmoY7khyqtLWynlIvzYmE/exec";
+
+function enviarAGoogleSheets() {
+    const datos = {
+        formulario: "CHECK-MOVIL-0009 Camioneta",
+        fecha: document.getElementById('fecha')?.value || "",
+        patente: document.getElementById('patente')?.value || "",
+        conductor: document.getElementById('chofer')?.value || "",
+        rut: document.getElementById('rut')?.value || "",
+        cargo: document.getElementById('cargo')?.value || "",
+        marca: document.getElementById('marca')?.value || "",
+        modelo: document.getElementById('modelo')?.value || "",
+        kilometraje: document.getElementById('kilometraje')?.value || "",
+        ano: document.getElementById('ano')?.value || "",
+        clase: document.getElementById('clase')?.value || "",
+        observaciones: document.getElementById('observacionesGenerales')?.value || "",
+        items: {}
+    };
+
+    const todosItems = [];
+    checklistItems.forEach(section => {
+        section.items.forEach(item => {
+            todosItems.push(item ? `${section.section ? section.section + ' - ' : ''}${item}` : "(vacío)");
+        });
+    });
+
+    for (let i = 1; i <= todosItems.length; i++) {
+        const nombre = todosItems[i - 1];
+        const si = document.getElementById(`si_${i}`)?.checked;
+        const no = document.getElementById(`no_${i}`)?.checked;
+        const na1 = document.getElementById(`na1_${i}`)?.checked;
+        const bueno = document.getElementById(`b_${i}`)?.checked;
+        const malo = document.getElementById(`m_${i}`)?.checked;
+        const na2 = document.getElementById(`na2_${i}`)?.checked;
+        const obs = document.getElementById(`obs_${i}`)?.value || "";
+
+        let estado = si ? "Sí" : no ? "No" : na1 ? "N/A" : "";
+        let condicion = bueno ? "Bueno" : malo ? "Malo" : na2 ? "N/A" : "";
+
+        datos.items[nombre] = { estado, condicion, obs };
+    }
+
+    fetch(GOOGLE_SHEETS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+    }).catch(() => {});
+}
 const checklistItems = [
     { section: 'DOCUMENTOS', items: ['Permiso de Circulación', 'Seguro Obligatorio', 'Certificado Antivuelco ext.', 'Certificado Antivuelco int.', 'Patente del vehículo del.', 'Patente del vehículo tras.', 'Revisión Tecnica', 'Ultima Mantención']},
     { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Neblineros', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento']},
@@ -331,6 +380,7 @@ if (aforadorImg && needle) {
 }
 
 function generatePDF() {
+    enviarAGoogleSheets();
     // Mostrar spinner
     const overlay = document.createElement('div');
     overlay.className = 'pdf-overlay';

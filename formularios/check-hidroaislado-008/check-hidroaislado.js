@@ -1,3 +1,11 @@
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxMubR5VPola9CmE_hDLvVfup6YvAXbcjZozareZjL-ZAwkmoY7khyqtLWynlIvzYmE/exec";
+function enviarAGoogleSheets() {
+    const datos = { formulario: "CHECK-MOVIL-0008 Hidroelevador", fecha: document.getElementById('fecha')?.value || "", patente: document.getElementById('patente')?.value || "", conductor: document.getElementById('realizadaPor')?.value || "", rut: document.getElementById('rut')?.value || "", cargo: document.getElementById('cargo')?.value || "", marca: document.getElementById('marca')?.value || "", modelo: document.getElementById('modelo')?.value || "", kilometraje: document.getElementById('kilometraje')?.value || "", ano: document.getElementById('ano')?.value || "", clase: document.getElementById('clase')?.value || "", observaciones: document.getElementById('observacionesGenerales')?.value || document.getElementById('observaciones')?.value || "", items: {} };
+    const todosItems = []; checklistItems.forEach(section => { section.items.forEach(item => { todosItems.push(item ? (section.section ? section.section + ' - ' + item : item) : '(vacio)'); }); });
+    for (let i = 1; i <= todosItems.length; i++) { const nombre = todosItems[i-1]; const si = document.getElementById('si_'+i)?.checked; const no = document.getElementById('no_'+i)?.checked; const na1 = document.getElementById('na1_'+i)?.checked; const bueno = document.getElementById('b_'+i)?.checked; const malo = document.getElementById('m_'+i)?.checked; const na2 = document.getElementById('na2_'+i)?.checked; const obs = document.getElementById('obs_'+i)?.value || ''; let estado = [si && 'Sí', no && 'No', na1 && 'N/A'].filter(Boolean).join(', ') || ''; let condicion = [bueno && 'Bueno', malo && 'Malo', na2 && 'N/A'].filter(Boolean).join(', ') || ''; datos.items[nombre] = { estado, condicion, obs }; }
+    fetch(GOOGLE_SHEETS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) }).catch(() => {});
+}
+
 const checklistItems = [
     { section: 'DOCUMENTOS', items: ['Padrón', 'Permiso de Circulación', 'Revisión Técnica', 'Seguro Obligatorio', 'Liner', 'Ultima Mantención', 'Prueba Ensayo Dieléctrico']},
     { section: 'LUCES', items: ['Interior Cabina', 'Altas', 'Bajas', 'Retroceso', 'Viraje Izquierdo', 'Viraje Derecho', 'Emergencia', 'Freno', 'Tercera Luz de Freno', 'Estacionamiento', 'L. Trocha (izquierdo)', 'L. Trocha (derecho)', 'L. Trocha (traseras)']},
@@ -339,6 +347,7 @@ if (aforadorImg && needle) {
 }
 
 function generatePDF() {
+    enviarAGoogleSheets();
     // Mostrar spinner
     const overlay = document.createElement('div');
     overlay.className = 'pdf-overlay';
