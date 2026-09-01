@@ -242,9 +242,6 @@ textarea.form-control {
     .table-responsive {
         -webkit-overflow-scrolling: touch;
     }
-    .checklist-table {
-        min-width: 500px;
-    }
     .form-container {
         padding: 12px;
         margin: 8px;
