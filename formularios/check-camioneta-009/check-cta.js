@@ -40,6 +40,12 @@ function enviarAGoogleSheets() {
         datos.items[nombre] = { estado, condicion, obs };
     }
 
+    // Impacto Carrocería (campo base, va después de Observaciones)
+    const impactos = [];
+    if (document.getElementById('abolladura')?.checked) impactos.push('Abolladura');
+    if (document.getElementById('rayadura')?.checked) impactos.push('Rayadura');
+    if (document.getElementById('piezaRota')?.checked) impactos.push('Pieza Rota');
+    datos.impactoCarroceria = impactos.join(', ');
     fetch(GOOGLE_SHEETS_URL, {
         method: "POST",
         mode: "no-cors",

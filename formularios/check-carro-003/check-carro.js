@@ -3,6 +3,12 @@ function enviarAGoogleSheets() {
     const datos = { formulario: "CHECK-MOVIL-0003 Carro de Arrastre", fecha: document.getElementById('fecha')?.value || "", patente: document.getElementById('patente')?.value || "", conductor: document.getElementById('realizadaPor')?.value || "", rut: document.getElementById('rut')?.value || "", cargo: document.getElementById('cargo')?.value || "", marca: document.getElementById('marca')?.value || "", modelo: document.getElementById('modelo')?.value || "", kilometraje: document.getElementById('kilometraje')?.value || "", ano: document.getElementById('ano')?.value || "", clase: document.getElementById('clase')?.value || "", observaciones: document.getElementById('observacionesGenerales')?.value || "", items: {} };
     const todosItems = []; checklistItems.forEach(section => { section.items.forEach(item => { todosItems.push(item || '(vacio)'); }); });
     for (let i = 0; i < todosItems.length; i++) { const nombre = todosItems[i]; const radio = document.querySelector('input[name="item'+i+'"]:checked'); const obs = document.getElementById('obs'+i)?.value || ''; let estado = radio ? (radio.value === 'si' ? 'Sí' : radio.value === 'no' ? 'No' : 'N/A') : ''; datos.items[nombre] = { estado, condicion: '', obs }; }
+    // Impacto Carrocería (campo base, va después de Observaciones)
+    const impactos = [];
+    if (document.getElementById('abolladura')?.checked) impactos.push('Abolladura');
+    if (document.getElementById('rayadura')?.checked) impactos.push('Rayadura');
+    if (document.getElementById('piezaRota')?.checked) impactos.push('Pieza Rota');
+    datos.impactoCarroceria = impactos.join(', ');
     fetch(GOOGLE_SHEETS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) }).catch(() => {});
 }
 
