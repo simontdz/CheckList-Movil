@@ -31,8 +31,8 @@ function enviarAGoogleSheets() {
         const na2 = document.getElementById(`na2_${i}`)?.checked;
         const obs = document.getElementById(`obs_${i}`)?.value || "";
 
-        let estado = si ? "Sí" : no ? "No" : na1 ? "N/A" : "";
-        let condicion = bueno ? "Bueno" : malo ? "Malo" : na2 ? "N/A" : "";
+        let estado = [si && 'Sí', no && 'No', na1 && 'N/A'].filter(Boolean).join(', ') || "";
+        let condicion = [bueno && 'Bueno', malo && 'Malo', na2 && 'N/A'].filter(Boolean).join(', ') || "";
 
         datos.items[nombre] = { estado, condicion, obs };
     }
