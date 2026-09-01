@@ -341,12 +341,9 @@ function enviarAGoogleSheets() {
         patente: document.getElementById('patente')?.value || "",
         conductor: document.getElementById('chofer')?.value || "",
         rut: document.getElementById('rut')?.value || "",
-        cargo: document.getElementById('cargo')?.value || "",
         marca: document.getElementById('marca')?.value || "",
         modelo: document.getElementById('modelo')?.value || "",
         kilometraje: document.getElementById('kilometraje')?.value || "",
-        ano: document.getElementById('ano')?.value || "",
-        clase: document.getElementById('clase')?.value || "",
         observaciones: document.getElementById('observacionesGenerales')?.value || "",
         items: {}
     };
