@@ -241,18 +241,13 @@ textarea.form-control {
     }
     .table-responsive {
         -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
     }
     .checklist-table {
-        table-layout: fixed;
-        width: 100%;
+        min-width: 600px;
     }
-    .checklist-table td, .checklist-table th {
-        overflow: hidden;
-        word-break: break-word;
-    }
-    .checklist-table input[type="text"] {
-        max-width: 100%;
-        box-sizing: border-box;
+    .checklist-table th, .checklist-table td {
+        padding: 3px 2px !important;
     }
     .form-container {
         padding: 12px;
