@@ -835,18 +835,11 @@ function generatePDF() {
         }
     }
 
-    // Abrir vista previa en nueva pestaña
-    const pdfBlob = doc.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
-    window.open(pdfUrl, '_blank');
 
-    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
+    // Descargar el PDF directamente con nombre y extensión correctos
     const nombrePDF = 'CHECK-MOVIL-0001_' + (patente || 'FURGON') + '_' + (fecha || '') + '.pdf';
-    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
-    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
-    }
+    doc.save(nombrePDF);
     }, 100);
 }
