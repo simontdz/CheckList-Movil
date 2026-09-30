@@ -838,16 +838,20 @@ function generatePDF() {
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
 
-    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
     const nombrePDF = 'CHECK-MOVIL-0001_' + (patente || 'FURGON') + '_' + (fecha || '') + '.pdf';
-    const pdfBlob = doc.output('blob');
-    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+    const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        // Soporta compartir: solo menú nativo, sin fallback a visor (evita blob)
-        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+    if (esIOS) {
+        // iPhone/iPad: iOS no permite descarga directa, se comparte como archivo real
+        const pdfBlob = doc.output('blob');
+        const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+        } else {
+            doc.save(nombrePDF);
+        }
     } else {
-        // Navegador sin soporte de compartir (ej: desktop): descarga directa
+        // Android y escritorio: descarga directa
         doc.save(nombrePDF);
     }
     }, 100);
