@@ -819,11 +819,26 @@ function generatePDF() {
         }
     }
 
-    // Abrir vista previa en nueva pestaña
-    const pdfBlob = doc.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
-    window.open(pdfUrl, '_blank');
+
+    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
+    const nombrePDF = 'CHECK-MOVIL-0009_' + (patente || 'CAMIONETA') + '_' + (fecha || '') + '.pdf';
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+    } else {
+        doc.save(nombrePDF);
+    }
     }, 100);
+}
+
+
+function confirmarGenerar() {
+    document.getElementById('confirmModal').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('confirmModal').style.display = 'none';
 }
