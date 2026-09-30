@@ -882,12 +882,17 @@ function generatePDF() {
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
 
-    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
     const nombrePDF = 'CHECK-MOVIL-0010_' + (patente || 'PLUMA') + '_' + (fecha || '') + '.pdf';
-    const pdfBlob = doc.output('blob');
-    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
-    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+    const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (esIOS) {
+        const pdfBlob = doc.output('blob');
+        const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+        } else {
+            doc.save(nombrePDF);
+        }
     } else {
         doc.save(nombrePDF);
     }
