@@ -852,3 +852,11 @@ function generatePDF() {
     }
     }, 100);
 }
+
+function confirmarGenerar() {
+    document.getElementById('confirmModal').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('confirmModal').style.display = 'none';
+}
