@@ -844,10 +844,10 @@ function generatePDF() {
     const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
 
     if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        navigator.share({ files: [pdfFile], title: nombrePDF })
-            .catch(() => { doc.save(nombrePDF); });
+        // Soporta compartir: solo menú nativo, sin fallback a visor (evita blob)
+        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
     } else {
-        // Navegador sin soporte de compartir: descarga directa
+        // Navegador sin soporte de compartir (ej: desktop): descarga directa
         doc.save(nombrePDF);
     }
     }, 100);
