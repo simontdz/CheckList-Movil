@@ -838,8 +838,17 @@ function generatePDF() {
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
 
-    // Descargar el PDF directamente con nombre y extensión correctos
+    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
     const nombrePDF = 'CHECK-MOVIL-0001_' + (patente || 'FURGON') + '_' + (fecha || '') + '.pdf';
-    doc.save(nombrePDF);
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        navigator.share({ files: [pdfFile], title: nombrePDF })
+            .catch(() => { doc.save(nombrePDF); });
+    } else {
+        // Navegador sin soporte de compartir: descarga directa
+        doc.save(nombrePDF);
+    }
     }, 100);
 }
