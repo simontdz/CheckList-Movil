@@ -841,5 +841,12 @@ function generatePDF() {
     // Quitar spinner
     document.getElementById('pdfOverlay')?.remove();
     window.open(pdfUrl, '_blank');
+
+    // Compartir el PDF como archivo real (WhatsApp, correo, etc.)
+    const nombrePDF = 'CHECK-MOVIL-0001_' + (patente || 'FURGON') + '_' + (fecha || '') + '.pdf';
+    const pdfFile = new File([pdfBlob], nombrePDF, { type: 'application/pdf' });
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        navigator.share({ files: [pdfFile], title: nombrePDF }).catch(() => {});
+    }
     }, 100);
 }
