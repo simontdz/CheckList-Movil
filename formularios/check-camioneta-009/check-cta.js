@@ -1,4 +1,4 @@
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxMubR5VPola9CmE_hDLvVfup6YvAXbcjZozareZjL-ZAwkmoY7khyqtLWynlIvzYmE/exec";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwM4VozbQWsUYRUWHB-YjLtvXlTGXpkSKuT-lxrz79dhXSKA-b-0zA6fgNQ2Z-FCpJt/exec";
 
 function enviarAGoogleSheets() {
     const datos = {
@@ -823,6 +823,11 @@ function generatePDF() {
     document.getElementById('pdfOverlay')?.remove();
 
     const nombrePDF = 'CHECK-MOVIL-0009_' + (patente || 'CAMIONETA') + '_' + (fecha || '') + '.pdf';
+
+    // Enviar el PDF por correo vía Apps Script
+    const pdfBase64 = doc.output('datauristring').split(',')[1];
+    enviarPDFPorCorreo(pdfBase64, nombrePDF);
+
     const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     if (esIOS) {
@@ -837,6 +842,21 @@ function generatePDF() {
         doc.save(nombrePDF);
     }
     }, 100);
+}
+
+function enviarPDFPorCorreo(pdfBase64, nombrePDF) {
+    const payload = {
+        tipo: 'pdf',
+        formulario: 'CHECK-MOVIL-0009 Camioneta',
+        nombreArchivo: nombrePDF,
+        pdfBase64: pdfBase64
+    };
+    fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    }).catch(() => {});
 }
 
 
