@@ -859,6 +859,9 @@ function generatePDF() {
         // Android y escritorio: descarga directa
         doc.save(nombrePDF);
     }
+
+    // Mostrar confirmación de éxito
+    mostrarExito();
     }, 100);
 }
 
@@ -883,4 +886,13 @@ function confirmarGenerar() {
 
 function cerrarModal() {
     document.getElementById('confirmModal').style.display = 'none';
+}
+
+
+function mostrarExito() {
+    document.getElementById('exitoModal').style.display = 'flex';
+}
+
+function cerrarExito() {
+    document.getElementById('exitoModal').style.display = 'none';
 }
