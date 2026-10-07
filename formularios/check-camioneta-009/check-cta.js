@@ -1,4 +1,4 @@
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwM4VozbQWsUYRUWHB-YjLtvXlTGXpkSKuT-lxrz79dhXSKA-b-0zA6fgNQ2Z-FCpJt/exec";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxOF11USTs2kUPPh8vB7eLEL33V4KU0THdKtU62vNE-QvAR3xvJ6VaiJEf2u00O1YP4/exec";
 
 function enviarAGoogleSheets() {
     const datos = {
