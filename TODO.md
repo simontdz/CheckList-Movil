@@ -1,2 +1,0 @@
-- [x] Insertar todos los datos del formulario al PDF (incluyendo nombreResRecepcion y rutResRecepcion)
-- [ ] Fotos no son necesarias - tarea cancelada

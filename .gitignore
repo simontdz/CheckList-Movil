@@ -1,7 +1,2 @@
-
-.entrypoint.mk
 .mk-tools
 .kiro
-kiro-forms
-kiro-checklist-movil
-assets/images/aws-apigateway-rest/
